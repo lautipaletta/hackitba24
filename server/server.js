@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier, get_summary_primary_emotion_from_Felicia } from "./model_requests.js";
 import { Message, User, Session } from "./schemas.js";
+import { generate_report } from "./exporter.js"
 import { ObjectId } from "bson";
 
 const app = express(); 
@@ -13,6 +14,8 @@ app.listen(PORT, (error) => {
     if(!error) console.log("Server is Successfully Running, and App is listening on port "+ PORT) 
     else console.log("Error occurred, server can't start", error); 
 });
+
+app.use('/report', express.static('reports'))
 
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
@@ -109,4 +112,8 @@ app.post('/message', async (req, res) => {
     await usr.save();
 
     res.status(200).send(next_message);
+});
+
+app.get('/create_report', (req, res) => {
+    generate_report("Jorge", "1234", "se llama juan", "00/00/0000 - 23/23/2023", [{content: "lloro", period: "00/00/0000 - 23/23/2023"}, {content: "no lloro", period: "00/00/0000 - 23/23/2023"}]);
 });
