@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { get_next_message_from_Alicia, get_session_summary_from_Mauro } from "./model_requests.js";
 import { Message, User, Session } from "./schemas.js";
+import { ObjectId } from "bson";
 
 const app = express(); 
 const PORT = 3000; 
@@ -15,6 +16,19 @@ app.listen(PORT, (error) => {
 
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
+
+//const juan = new User({name: "Juan", sessions: [], _id: new ObjectId("6610ebbe9a26fa276452bfae")});
+//console.log(juan);
+//juan.save();
+
+app.get('/hi', (req, res) => res.send("Hi!"));
+
+app.post('/create_user', async (req, res) => {
+    const usr = new User({name: req.body.name});
+    await usr.save();
+
+    res.status(200).send({user_id: usr._id});
+});
 
 app.post('/start_session', async (req, res) => {
     const usr = await User.findById(req.body.user_id).exec();
