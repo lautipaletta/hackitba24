@@ -22,7 +22,7 @@ console.log("connected to database")
 app.get('/hi', (req, res) => res.send("Hi!"));
 
 app.post('/create_user', async (req, res) => {
-    const usr = new User({name: req.body.name, sessions: [], week_attendance: [0, 0, 0, 0, 0, 0, 0], emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
+    const usr = new User({name: req.body.name, sessions: [], week_attendance: Array(7).fill(false), emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
     await usr.save();
 
     res.status(200).send({user_id: usr._id});
@@ -115,7 +115,8 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
-    if(!usr.week_attendance[6]) usr.week_attendance[6] = true;
+    const len = usr.week_attendance.length-1;
+    if(!usr.week_attendance[len]) usr.week_attendance[len] = true;
 
     await session.save();
     await usr.save();
