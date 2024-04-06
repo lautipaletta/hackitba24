@@ -7,8 +7,10 @@ environment:
   sdk: '>=3.0.6 <4.0.0'
 
 dependencies:
+  concentric_transition: ^1.0.3
   dio: ^5.4.2+1
   either_dart: ^1.0.0
+  fl_chart: ^0.67.0
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
@@ -36,6 +38,7 @@ flutter:
   assets:
     - assets/
     - assets/fonts/
+    - assets/images/
     - assets/images/svg/
     - assets/images/png/
 
