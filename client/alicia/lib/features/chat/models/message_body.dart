@@ -5,6 +5,7 @@ part 'message_body.g.dart';
 @JsonSerializable()
 class MessageBody {
   final String content;
+  @JsonKey(name: 'user_id')
   final String userId;
 
   MessageBody({required this.content, required this.userId});

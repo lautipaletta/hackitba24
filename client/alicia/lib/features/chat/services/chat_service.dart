@@ -2,7 +2,9 @@ import 'package:alicia/core/common/models/message.dart';
 import 'package:alicia/core/common/providers/dio_provider.dart';
 import 'package:alicia/features/chat/models/message_body.dart';
 import 'package:alicia/features/chat/models/session_response.dart';
+import 'package:alicia/features/chat/models/user_body.dart';
 import 'package:dio/dio.dart';
+import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -16,11 +18,11 @@ final chatServiceProvider = Provider<ChatService>((ref) {
 abstract class ChatService {
   factory ChatService(Dio dio, {String baseUrl}) = _ChatService;
 
-  @GET('/startSession')
-  Future<SessionResponse> startSession({@Query('user_id') required String userId});
+  @POST('/startSession')
+  Future<SessionResponse> startSession({@Body() required UserBody body});
 
-  @GET('/endSession')
-  Future<void> endSession({@Query('user_id') required String userId});
+  @POST('/endSession')
+  Future<void> endSession({@Body() required UserBody body});
 
   @POST('/message')
   Future<Message> message({@Body() required MessageBody body});
