@@ -6,7 +6,6 @@ import 'package:alicia/features/home/widgets/alicia_fab.dart';
 import 'package:alicia/features/home/widgets/day_card.dart';
 import 'package:alicia/features/home/widgets/mood_counter.dart';
 import 'package:alicia/features/home/widgets/report_button.dart';
-import 'package:alicia/features/home/widgets/report_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -75,17 +74,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: [0, 1, 2, 3, 4, 5, 6].map<Widget>(
+                        children: [6, 5, 4, 3, 2, 1, 0].map<Widget>(
                           (day) {
                             if (state.attendance != null) {
-                              final now = DateTime.now().subtract(Duration(days: 7 - day));
+                              final now = DateTime.now().subtract(Duration(days: day));
                               final weekDay = now.weekday - 1;
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0, top: 8),
                                 child: DayCard(
                                   day: Day.values[weekDay],
                                   dayNumber: now.day,
-                                  filled: state.attendance![weekDay],
+                                  filled: state.attendance![6 - day],
                                 ),
                               );
                             } else {

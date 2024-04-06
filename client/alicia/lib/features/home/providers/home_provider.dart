@@ -70,4 +70,15 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return Right(response.right.url);
     }
   }
+
+  Future<Either<AppException, void>> getAttendance() async {
+    state = state.copyWith(attendance: null);
+    final response = await ref.read(homeRepositoryProvider).getAttendance(userId: state.userId);
+    if (response.isLeft) {
+      return Left(response.left);
+    } else {
+      state = state.copyWith(attendance: response.right.attendance);
+      return const Right(null);
+    }
+  }
 }

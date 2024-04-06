@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:alicia/core/assets/assets.dart';
 import 'package:alicia/core/config/style/colors.dart';
 import 'package:alicia/features/chat/providers/chat_provider.dart';
+import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -92,6 +93,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                 ? Center(
                     child: CircularProgressIndicator(
                       color: AliciaColors.backgroundWhite,
+                      strokeCap: StrokeCap.round,
                     ),
                   )
                 : Stack(
@@ -110,7 +112,10 @@ class ChatPageState extends ConsumerState<ChatPage> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: IconButton(
-                                onPressed: () => context.pop(),
+                                onPressed: () {
+                                  ref.read(homeProvider.notifier).getAttendance();
+                                  context.pop();
+                                },
                                 icon: Icon(
                                   Icons.arrow_back_ios_new,
                                   color: AliciaColors.backgroundGray,
@@ -125,6 +130,8 @@ class ChatPageState extends ConsumerState<ChatPage> {
                                         height: 15,
                                         child: CircularProgressIndicator(
                                           color: AliciaColors.backgroundWhite,
+                                          strokeWidth: 1.2,
+                                          strokeCap: StrokeCap.round,
                                         ),
                                       ),
                                     )
