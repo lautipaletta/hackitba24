@@ -42,7 +42,7 @@ app.post('/start_session', async (req, res) => {
     const session = new Session({messages: [opening_message], timestamp: Date.now()});
 
     usr.sessions.push(session);
-    await usr.update();
+    await usr.save();
 
     res.status(200).send({prev_session_id: prev_session?._id, messages: [opening_message]});
 });
@@ -75,16 +75,19 @@ app.post('/end_session', async (req, res) => {
 
     if (session.messages.length <= 1) {
         usr.sessions.pop();
+        await usr.save();
     }
     else {
         session.summary = await get_session_summary_from_Mauro(session.messages);
+        await usr.save();
 
         usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
-        const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
-        usr.emotional_summary[primary_emotion] += 1;
-    }
+        await usr.save();
 
-    await usr.update();
+        const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
+        usr.emotional_summary[primary_emotion] = (usr.emotional_summary[primary_emotion] ?? 0) + 1;
+        await usr.save();
+    }
 
     res.sendStatus(200);
 });
@@ -101,6 +104,8 @@ app.post('/message', async (req, res) => {
     
     session.messages.push(message);
 
+    await usr.save();
+
     const prev_summary = usr.sessions[usr.sessions.length - 2]?.summary;
 
     const next_message_str = await get_next_message_from_Alicia(session.messages, prev_summary);
@@ -109,7 +114,7 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
-    await usr.update();
+    await usr.save();
 
     res.status(200).send(next_message);
 });
@@ -118,13 +123,17 @@ app.get('/get_report', async (req, res) => {
     const user_id = req.query.user_id;
     const usr = await User.findById(user_id);
     if(!usr) return res.sendStatus(400);
+
     const sessions = usr.sessions;
     if(sessions.length == 0) return res.sendStatus(400);
+
     const report_period = period_from_list(sessions);
+
     generate_report(usr.name, user_id, usr.summary, report_period, 
         sessions.map(session => {
             return {content: session.summary, date: new SimpleDateFormat("dd-MM-yyyy").format(new Date(session.timestamp).toString())}
         }));
+
     res.status(200).send({url: `/reports/${user_id}.pdf`});
 });
 
