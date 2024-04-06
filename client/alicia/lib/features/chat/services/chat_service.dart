@@ -19,10 +19,10 @@ abstract class ChatService {
   factory ChatService(Dio dio, {String baseUrl}) = _ChatService;
 
   @POST('/startSession')
-  Future<SessionResponse> startSession({@Body() UserBody body});
+  Future<SessionResponse> startSession({@Body() required UserBody body});
 
   @POST('/endSession')
-  Future<void> endSession({@Body() UserBody body});
+  Future<void> endSession({@Body() required UserBody body});
 
   @POST('/message')
   Future<Message> message({@Body() required MessageBody body});
