@@ -21,6 +21,18 @@ class MainApp extends StatelessWidget {
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: MaterialApp.router(
               routerConfig: ref.read(routerProvider),
+              theme: ThemeData(
+                fontFamily: 'Poppins',
+                colorScheme: const ColorScheme.light(
+                  primary: Colors.white,
+                  secondary: Colors.white,
+                ),
+                textSelectionTheme: TextSelectionThemeData(
+                  cursorColor: Colors.white,
+                  selectionColor: Colors.white.withOpacity(0.4),
+                  selectionHandleColor: Colors.white,
+                ),
+              ),
             ),
           );
         },
