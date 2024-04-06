@@ -7,6 +7,8 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
 
 const Alicia_base_system_prompt = fs.readFileSync("./prompts/Alicia_system_prompt.txt").toString();
 const Mauro_system_prompt = fs.readFileSync("./prompts/Mauro_system_prompt.txt").toString();
+const Javier_system_prompt = fs.readFileSync("./prompts/Javier_system_prompt.txt").toString();
+const Felicia_system_prompt = fs.readFileSync("./prompts/Felicia_system_prompt.txt").toString();
 
 function message_list_to_conversation_list(messages) {
     return messages.map((message) => {
@@ -48,4 +50,25 @@ async function get_session_summary_from_Mauro(messages) {
     return completion.choices[0].message.content;
 }
 
-export {get_next_message_from_Alicia, get_session_summary_from_Mauro};
+async function get_user_summary_from_Javier(current_summary, last_session_summary) {
+    const user_prompt = "Current summary:\n" + (current_summary ?? "") + "\nLast session summary:\n" + last_session_summary;
+
+    const completion = await openai.chat.completions.create({
+        messages: [{role: "system", content: Javier_system_prompt}, {role: "user", content: user_prompt}],
+        model: "gpt-3.5-turbo"
+    })
+
+    return completion.choices[0].message.content;
+}
+
+async function get_summary_primary_emotion_from_Felicia(summary) {
+    const completion = await openai.chat.completions.create({
+        messages: [{role: "system", content: Felicia_system_prompt}, {role: "user", content: summary}],
+        model: "gpt-3.5-turbo"
+    })
+
+    return completion.choices[0].message.content.toLowerCase();
+
+}
+
+export {get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier, get_summary_primary_emotion_from_Felicia};

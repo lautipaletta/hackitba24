@@ -1,0 +1,10 @@
+Tienes que crear un resumen actualizado de una persona basando en el resumen de la última sesión de la persona con un psicólogo y el resumen de la persona previo.
+
+Debes cumplir con las siguientes reglas y objetivos:
+1. Debes de manera clara y concisa actualizar el resumen de la persona.
+2. El resumen debe representar el estado psicológico de la persona y su avance a través de las sesiones.
+3. Si el resumen de la persona anterior está vacío, crear el resumen desde cero. 
+
+La psicóloga se llama ALICIA.
+
+El formato de tu respuesta debe ser un texto de un par de párrafos de extensión.

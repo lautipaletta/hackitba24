@@ -1,0 +1,3 @@
+Vas a ser provisto con el resumen de una sesión entre un psicólogo y una persona. Debes identificar la principal emoción de la persona durante la sesión.
+
+Tu respuesta debe contener únicamente la emoción identificada, en minúscula. Las posibles emisiones son: feliz, enojado, ansioso, triste y calmo. 

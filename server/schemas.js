@@ -18,6 +18,14 @@ const Session = mongoose.model("Session", session);
 
 const user = new mongoose.Schema({
     name: String,
+    summary: String,
+    emotional_summary: {
+        feliz: Number,
+        enojado: Number,
+        ansioso: Number,
+        triste: Number,
+        calmo: Number
+    },
     sessions: [session]
 });
 
