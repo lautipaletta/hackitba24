@@ -22,7 +22,7 @@ console.log("connected to database")
 app.get('/hi', (req, res) => res.send("Hi!"));
 
 app.post('/create_user', async (req, res) => {
-    const usr = new User({name: req.body.name, sessions: [], emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
+    const usr = new User({name: req.body.name, sessions: [], week_attendance: [0, 0, 0, 0, 0, 0, 0], emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
     await usr.save();
 
     res.status(200).send({user_id: usr._id});
@@ -114,10 +114,27 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
+    //if(usr.week_attendance[6] == 0) usr.week_attendance[6] = 1;
+
     await usr.save();
 
     res.status(200).send(next_message);
 });
+
+app.get('/get_attendance', (req, res) => {
+    const usr = User.findById(req.query.user_id);
+    if(!usr) return res.sendStatus(400);
+    usr.week_attendance = shift_array(usr.week_attendance, Date.now() - new Date(usr.last_attendance));
+    res.status(200).send({attendance: usr.week_attendance});
+});
+
+function shift_array(array, shift){
+    let out = Array(array.length).fill(0);
+    for(let i=0; i<array.length-shift; i++){
+        out[i] = array[i+shift];
+    }
+    return out;
+}
 
 app.get('/get_report', async (req, res) => {
     const user_id = req.query.user_id;
@@ -131,7 +148,7 @@ app.get('/get_report', async (req, res) => {
 
     generate_report(usr.name, user_id, usr.summary, report_period, 
         sessions.map(session => {
-            return {content: session.summary, date: new SimpleDateFormat("dd-MM-yyyy").format(new Date(session.timestamp).toString())}
+            return {content: session.summary, date: new Date(session.timestamp).toLocaleDateString("es-ES")}
         }));
 
     res.status(200).send({url: `/reports/${user_id}.pdf`});

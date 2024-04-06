@@ -2,6 +2,7 @@ import 'package:alicia/core/common/models/app_exception.dart';
 import 'package:alicia/core/common/models/message.dart';
 import 'package:alicia/features/chat/models/chat_state.dart';
 import 'package:alicia/features/chat/repository/chat_repository.dart';
+import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:either_dart/either.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -23,7 +24,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   void init() async {
     if (!state.sessionStarted) {
       state = state.copyWith(isLoading: true, error: null);
-      final response = await ref.read(chatRepositoryProvider).startSession();
+      final response = await ref.read(chatRepositoryProvider).startSession(userId: ref.read(homeProvider).userId);
       if (response.isLeft) {
         state = state.copyWith(isLoading: false, error: response.left.message);
         return;
@@ -48,7 +49,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   Future<Either<AppException, void>> sendMessage({required String content}) async {
-    final response = await ref.read(chatRepositoryProvider).message(content: content);
+    final response = await ref.read(chatRepositoryProvider).message(content: content, userId: ref.read(homeProvider).userId);
     if (response.isLeft) {
       state = state.copyWith(aliciaTyping: false);
       return Left(response.left);
@@ -62,13 +63,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   Future<void> endSession() async {
     state = state.copyWith(sessionTerminated: true);
-    await ref.read(chatRepositoryProvider).endSession();
+    await ref.read(chatRepositoryProvider).endSession(userId: ref.read(homeProvider).userId);
   }
 
   Future<Either<AppException, void>> loadMoreSessions() async {
     if (state.isLoadingMore || state.prevSessionId == null) return const Right(null);
     state = state.copyWith(isLoadingMore: true);
-    final response = await ref.read(chatRepositoryProvider).getSession(sessionId: state.prevSessionId!);
+    final response = await ref.read(chatRepositoryProvider).getSession(sessionId: state.prevSessionId!, userId: ref.read(homeProvider).userId);
     if (response.isLeft) {
       state = state.copyWith(isLoadingMore: false);
       return Left(response.left);
