@@ -153,5 +153,5 @@ app.get('/get_report', async (req, res) => {
 });
 
 function period_from_list(list){
-    return new Date(list[0].timestamp).toLocaleDateString("es-ES") + "-" + new Date(list[list.length-1].timestamp).toLocaleDateString("es-ES");
+    return new Date(list[0].timestamp).toLocaleDateString("es-ES") + " - " + new Date(list[list.length-1].timestamp).toLocaleDateString("es-ES");
 }
