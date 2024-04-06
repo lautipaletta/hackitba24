@@ -9,25 +9,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class AuthPage extends ConsumerStatefulWidget {
-  AuthPage({super.key});
+  const AuthPage({super.key});
 
   @override
   ConsumerState<AuthPage> createState() => _AuthPageState();
 }
 
 class _AuthPageState extends ConsumerState<AuthPage> {
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
+
   final formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
     bool hasError = false;
     nameController.addListener(() {
       if (hasError) {
@@ -49,10 +48,13 @@ class _AuthPageState extends ConsumerState<AuthPage> {
             top: 0,
             child: Image.asset(Assets.helloBlur),
           ),
-          Positioned(bottom: 0, child: Image.asset(
-            Assets.helloBlueBlur,
-            color: Color.fromRGBO(255, 255, 255, 0.5), // Cambia la opacidad aquí
-  colorBlendMode: BlendMode.modulate,)),
+          Positioned(
+              bottom: 0,
+              child: Image.asset(
+                Assets.helloBlueBlur,
+                color: Color.fromRGBO(255, 255, 255, 0.5), // Cambia la opacidad aquí
+                colorBlendMode: BlendMode.modulate,
+              )),
           Positioned(top: 300, right: 0, child: Image.asset(Assets.circle)),
           Positioned(bottom: 40, left: 0, child: Image.asset(Assets.circles)),
           Positioned(bottom: 120, right: 20, child: Image.asset(Assets.moods)),
@@ -75,13 +77,13 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                 ),
                 RichText(
                     text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontSize: 17, color: AliciaColors.backgroundGray),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontSize: 17, color: AliciaColors.backgroundGray),
                         children: const [
                       TextSpan(text: "Bienvenido a "),
-                      TextSpan(
-                          text: "Alicia",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: "Alicia", style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(text: ": tu nueva terapeuta"),
                     ])),
                 Expanded(
@@ -93,16 +95,10 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         children: [
                           RichText(
                               text: TextSpan(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(fontSize: 28),
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 28),
                                   children: const [
                                 TextSpan(text: "¿Cómo te"),
-                                TextSpan(
-                                    text: " llamas",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: " llamas", style: TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(text: "?"),
                               ])),
                           const SizedBox(height: 15),
@@ -112,50 +108,38 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
-                                      .copyWith(
-                                          fontSize: 17,
-                                          color: AliciaColors.backgroundGray),
+                                      .copyWith(fontSize: 17, color: AliciaColors.backgroundGray),
                                   children: const [
-                                    TextSpan(
-                                        text:
-                                            "Vas a tener sesiones completamente"),
+                                    TextSpan(text: "Vas a tener sesiones completamente"),
                                     TextSpan(
                                         text: " personalizadas",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
+                                        style: TextStyle(fontWeight: FontWeight.bold)),
                                     TextSpan(
                                         text:
                                             ", y luego podrás exportar tu reporte individual para contactar con"),
                                     TextSpan(
                                         text: " especialistas",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
+                                        style: TextStyle(fontWeight: FontWeight.bold)),
                                   ])),
                           const SizedBox(height: 50),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
                                   child: RichText(
                                       textAlign: TextAlign.start,
                                       text: TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(fontSize: 16),
+                                          style:
+                                              Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
                                           children: const [
                                             TextSpan(text: "Mi"),
                                             TextSpan(
                                                 text: " nombre",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                                style: TextStyle(fontWeight: FontWeight.bold)),
                                             TextSpan(text: " es:"),
                                           ])),
                                 ),
@@ -165,8 +149,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                   child: AliciaTextField(
                                       controller: nameController,
                                       validator: (value) {
-                                        if (value == null ||
-                                            value.trim().isEmpty) {
+                                        if (value == null || value.trim().isEmpty) {
                                           return 'Ingrese un nombre válido';
                                         }
                                       },
@@ -182,25 +165,21 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                 ),
                 ElevatedButton(
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(
-                            const Size(double.infinity, 65)),
-                        backgroundColor: MaterialStateProperty.all(
-                            AliciaColors.accentPurple),
-                        padding:
-                            MaterialStateProperty.all(const EdgeInsets.all(15)),
-                        shape: MaterialStateProperty.all(
-                            const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))))),
+                        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 65)),
+                        backgroundColor: MaterialStateProperty.all(AliciaColors.accentPurple),
+                        padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                        shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15))))),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         hasError = false;
-                        final response = await ref.read(authProvider.notifier).signup(name: nameController.text);
+                        final response =
+                            await ref.read(authProvider.notifier).signup(name: nameController.text);
                         if (response.isLeft) {
                           return;
                         }
                         final userId = ref.read(authProvider).userId!;
-                        
+
                         var hiveResponse = await ref.read(hiveRepositoryProvider).write(
                             boxName: AliciaHiveBox.ALICIA_BOX,
                             key: AliciaHiveBox.USER_NAME,
@@ -209,31 +188,25 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                           return;
                         }
                         hiveResponse = await ref.read(hiveRepositoryProvider).write(
-                            boxName: AliciaHiveBox.ALICIA_BOX,
-                            key: AliciaHiveBox.USER_ID,
-                            value: userId
-                        );
+                            boxName: AliciaHiveBox.ALICIA_BOX, key: AliciaHiveBox.USER_ID, value: userId);
                         if (response.isLeft) {
                           return;
                         }
                         hiveResponse = await ref.read(hiveRepositoryProvider).write(
-                            boxName: AliciaHiveBox.ALICIA_BOX,
-                            key: AliciaHiveBox.HAS_LOGGED_IN,
-                            value: true);
-                            
+                            boxName: AliciaHiveBox.ALICIA_BOX, key: AliciaHiveBox.HAS_LOGGED_IN, value: true);
+
                         if (response.isLeft) {
                           return;
                         }
                         print("Ok, nombre ingresado correctamente: ${nameController.text}");
-                        context.pushNamed(Routes.home.name);
+                        context.goNamed(Routes.home.name);
                       } else {
                         hasError = true;
                       }
                     },
                     child: const Text(
                       "Comenzar",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     )),
               ],
             ),

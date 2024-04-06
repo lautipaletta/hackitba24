@@ -39,6 +39,7 @@ class _AliciaTextFieldState extends State<AliciaTextField> {
       style: Theme.of(context).textTheme.bodyMedium,
       autovalidateMode: widget.autoValidateMode,
       validator: widget.validator,
+      cursorColor: AliciaColors.accentPurple,
       decoration: InputDecoration(
         filled: true,
         fillColor: AliciaColors.backgroundWhite,
