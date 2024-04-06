@@ -27,14 +27,14 @@ function message_list_to_conversation_string(messages) {
 
 async function get_next_message_from_Alicia(messages, prev_summary) {
     const messages_as_conversation = message_list_to_conversation_list(messages);
-    const system_prompt = Alicia_base_system_prompt + prev_summary ? `Ten en cuenta el siguiente resumen de la última conversación que tuviste con el usuario:\n${prev_summary}` : "";
+    const system_prompt = Alicia_base_system_prompt + (prev_summary ? `Ten en cuenta el siguiente resumen de la última conversación que tuviste con el usuario:\n${prev_summary}` : "");
 
     const completion = await openai.chat.completions.create({
         messages: [{role: "system", content: system_prompt}, ...messages_as_conversation],
         model: "gpt-3.5-turbo"
     })
 
-    return completion.choices[0].message;
+    return completion.choices[0].message.content;
 }
 
 async function get_session_summary_from_Mauro(messages) {
@@ -45,7 +45,7 @@ async function get_session_summary_from_Mauro(messages) {
         model: "gpt-3.5-turbo"
     })
 
-    return completion.choices[0].message;
+    return completion.choices[0].message.content;
 }
 
 export {get_next_message_from_Alicia, get_session_summary_from_Mauro};
