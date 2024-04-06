@@ -1,7 +1,9 @@
 import OpenAI from "openai";
 import fs from "fs";
 
-const openai = new OpenAI();
+import "dotenv/config";
+
+const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
 
 const Alicia_base_system_prompt = fs.readFileSync("./prompts/Alicia_system_prompt.txt").toString();
 const Mauro_system_prompt = fs.readFileSync("./prompts/Mauro_system_prompt.txt").toString();
