@@ -8,7 +8,7 @@ part of 'session_response.dart';
 
 SessionResponse _$SessionResponseFromJson(Map<String, dynamic> json) =>
     SessionResponse(
-      prevSessionId: json['prevSessionId'] as String,
+      prevSessionId: json['prev_session_id'] as String,
       messages: (json['messages'] as List<dynamic>)
           .map((e) => Message.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -16,6 +16,6 @@ SessionResponse _$SessionResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SessionResponseToJson(SessionResponse instance) =>
     <String, dynamic>{
-      'prevSessionId': instance.prevSessionId,
+      'prev_session_id': instance.prevSessionId,
       'messages': instance.messages,
     };
