@@ -16,7 +16,7 @@ function message_list_to_conversation_list(messages) {
 }
 
 function message_list_to_conversation_string(messages) {
-    const conversation = "";
+    let conversation = "";
 
     messages.forEach((message) => {
         conversation += `${(message.role == "user") ?  "USUARIO" : "ALICIA"}: ${message.content}`;
