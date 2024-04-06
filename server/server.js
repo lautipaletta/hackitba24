@@ -115,7 +115,7 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
-    if(usr.week_attendance[6] == 0) usr.week_attendance[6] = 1;
+    if(!usr.week_attendance[6]) usr.week_attendance[6] = true;
 
     await session.save();
     await usr.save();
@@ -131,7 +131,7 @@ app.get('/get_attendance', (req, res) => {
 });
 
 function shift_array(array, shift){
-    let out = Array(array.length).fill(0);
+    let out = Array(array.length).fill(false);
     for(let i=0; i<array.length-shift; i++){
         out[i] = array[i+shift];
     }
