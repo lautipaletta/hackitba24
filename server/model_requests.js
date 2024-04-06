@@ -3,8 +3,8 @@ import fs from "fs";
 
 const openai = new OpenAI();
 
-const Alicia_base_system_prompt = fs.readFileSync("./prompts/Alicia_system_prompt.txt");
-const Mauro_system_prompt = fs.readFileSync("./prompts/Mauro_system_prompt.txt");
+const Alicia_base_system_prompt = fs.readFileSync("./prompts/Alicia_system_prompt.txt").toString();
+const Mauro_system_prompt = fs.readFileSync("./prompts/Mauro_system_prompt.txt").toString();
 
 function message_list_to_conversation_list(messages) {
     return messages.map((message) => {
