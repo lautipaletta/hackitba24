@@ -60,6 +60,14 @@ app.get('/get_session', async (req, res) => {
     res.status(200).send({prev_session_id: prev_session?._id, messages: session.messages});
 });
 
+app.get('/get_emotions', async (req, res) => {
+    const usr = await User.findById(req.query.user_id);
+
+    if (!usr) return res.sendStatus(400);
+
+    res.status(200).send(usr.emotional_summary);
+});
+
 app.post('/end_session', async (req, res) => {
     const usr = await User.findById(req.body.user_id).exec();
     if (!usr) return res.sendStatus(400);
