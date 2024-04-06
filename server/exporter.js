@@ -26,21 +26,23 @@ function generate_report(user_name, user_id, user_summary, report_period, sessio
         .text(user_summary, {align: "justify"});
     
     sessions.forEach((session, index) => {
-        doc.addPage()
-            .font('fonts/Poppins-Bold.ttf')
-            .fontSize(24)
-            .text('Sesión #' + index)
-            .moveDown()
-            .font('fonts/Poppins-Medium.ttf')
-            .fontSize(16)
-            .text("Fecha: " + session.date)
-            .moveDown()
-            .font('fonts/Poppins-Bold.ttf')
-            .fontSize(12)
-            .text('Resumen Sesión: ')
-            .fontSize(12)
-            .font('fonts/Poppins-Regular.ttf')
-            .text(session.content);
+        if(session.content){
+            doc.addPage()
+                .font('fonts/Poppins-Bold.ttf')
+                .fontSize(24)
+                .text('Sesión #' + index)
+                .moveDown()
+                .font('fonts/Poppins-Medium.ttf')
+                .fontSize(16)
+                .text("Fecha: " + session.date)
+                .moveDown()
+                .font('fonts/Poppins-Bold.ttf')
+                .fontSize(12)
+                .text('Resumen Sesión: ')
+                .fontSize(12)
+                .font('fonts/Poppins-Regular.ttf')
+                .text(session.content);
+        }
     });
     
     doc.end();

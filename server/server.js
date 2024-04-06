@@ -123,7 +123,7 @@ app.get('/get_report', async (req, res) => {
     const report_period = period_from_list(sessions);
     generate_report(usr.name, user_id, usr.summary, report_period, 
         sessions.map(session => {
-            return {content: session.summary, date: new Date(session.timestamp).toString()}
+            return {content: session.summary, date: new SimpleDateFormat("dd-MM-yyyy").format(new Date(session.timestamp).toString())}
         }));
     res.status(200).send({url: `/reports/${user_id}.pdf`});
 });

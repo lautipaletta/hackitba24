@@ -26,6 +26,7 @@ const user = new mongoose.Schema({
         triste: Number,
         calmo: Number
     },
+    week_attendance: [Number],
     sessions: [session]
 });
 
