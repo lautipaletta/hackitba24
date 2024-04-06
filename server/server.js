@@ -122,10 +122,11 @@ app.post('/message', async (req, res) => {
     res.status(200).send(next_message);
 });
 
-app.get('/get_attendance', (req, res) => {
+app.get('/get_attendance', async (req, res) => {
     const usr = User.findById(req.query.user_id);
     if(!usr) return res.sendStatus(400);
     usr.week_attendance = shift_array(usr.week_attendance, Date.now() - new Date(usr.last_attendance));
+    await usr.save();
     res.status(200).send({attendance: usr.week_attendance});
 });
 
