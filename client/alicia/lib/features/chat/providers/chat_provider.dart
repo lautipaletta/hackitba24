@@ -16,6 +16,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   final Ref ref;
 
+  void resetState() {
+    state = const ChatState();
+  }
+
   void init() async {
     if (!state.sessionStarted) {
       state = state.copyWith(isLoading: true, error: null);
@@ -57,6 +61,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> endSession() async {
+    state = state.copyWith(sessionTerminated: true);
     await ref.read(chatRepositoryProvider).endSession();
   }
 
