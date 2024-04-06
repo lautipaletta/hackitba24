@@ -33,7 +33,7 @@ class _ChatService implements ChatService {
     )
             .compose(
               _dio.options,
-              '/startSession',
+              '/start_session',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -60,7 +60,7 @@ class _ChatService implements ChatService {
     )
         .compose(
           _dio.options,
-          '/endSession',
+          '/end_session',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -100,9 +100,15 @@ class _ChatService implements ChatService {
   }
 
   @override
-  Future<SessionResponse> getSession({required String sessionId}) async {
+  Future<SessionResponse> getSession({
+    required String sessionId,
+    required String userId,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'session_id': sessionId};
+    final queryParameters = <String, dynamic>{
+      r'session_id': sessionId,
+      r'user_id': userId,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -113,7 +119,7 @@ class _ChatService implements ChatService {
     )
             .compose(
               _dio.options,
-              '/getSession',
+              '/get_session',
               queryParameters: queryParameters,
               data: _data,
             )

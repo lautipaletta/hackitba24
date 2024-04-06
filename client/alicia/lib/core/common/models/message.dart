@@ -6,13 +6,12 @@ part 'message.g.dart';
 class Message {
   final String content;
   final int timestamp;
-  @JsonKey(name: 'user_id')
-  final String? userId;
+  final String role;
 
   Message({
     required this.content,
     required this.timestamp,
-    this.userId,
+    required this.role,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);

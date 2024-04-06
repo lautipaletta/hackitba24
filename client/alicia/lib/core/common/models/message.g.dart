@@ -9,11 +9,11 @@ part of 'message.dart';
 Message _$MessageFromJson(Map<String, dynamic> json) => Message(
       content: json['content'] as String,
       timestamp: json['timestamp'] as int,
-      userId: json['user_id'] as String?,
+      role: json['role'] as String,
     );
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'content': instance.content,
       'timestamp': instance.timestamp,
-      'user_id': instance.userId,
+      'role': instance.role,
     };
