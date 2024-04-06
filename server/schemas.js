@@ -27,6 +27,7 @@ const user = new mongoose.Schema({
         calmo: Number
     },
     week_attendance: [Number],
+    last_attendance: Number,
     sessions: [session]
 });
 
