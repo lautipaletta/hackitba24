@@ -6,7 +6,6 @@ import 'package:alicia/features/home/widgets/alicia_fab.dart';
 import 'package:alicia/features/home/widgets/day_card.dart';
 import 'package:alicia/features/home/widgets/mood_counter.dart';
 import 'package:alicia/features/home/widgets/report_button.dart';
-import 'package:alicia/features/home/widgets/report_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,19 +17,17 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) { 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(homeProvider.notifier).init();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isHomeLoading = ref.watch(homeProvider).isLoading;
-    final homePageProvider = ref.read(homeProvider);
+    final state = ref.watch(homeProvider);
     return Scaffold(
       floatingActionButton: const AliciaFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -51,41 +48,55 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    isHomeLoading? ShimmerSkelton(height: 30, width: double.infinity) :
-                    RichText(
-                      text: TextSpan(
-                        style: Theme.of(context).textTheme.displayLarge,
-                        children: [
-                          TextSpan(
-                            text: 'Bienvenido de nuevo, ',
-                            style:
-                                TextStyle(color: AliciaColors.darkText, fontSize: 25, fontFamily: 'Poppins'),
+                    state.isLoading
+                        ? const ShimmerSkelton(height: 30, width: double.infinity)
+                        : RichText(
+                            text: TextSpan(
+                              style: Theme.of(context).textTheme.displayLarge,
+                              children: [
+                                TextSpan(
+                                  text: 'Bienvenido de nuevo, ',
+                                  style: TextStyle(
+                                      color: AliciaColors.darkText, fontSize: 25, fontFamily: 'Poppins'),
+                                ),
+                                TextSpan(
+                                  text: state.userName,
+                                  style: TextStyle(
+                                      color: AliciaColors.darkText,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins'),
+                                ),
+                              ],
+                            ),
                           ),
-                          TextSpan(
-                            text: homePageProvider.userName,
-                            style: TextStyle(
-                                color: AliciaColors.darkText,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Poppins'),
-                          ),
-                        ],
-                      ),
-                    ),
                     const SizedBox(height: 20),
                     SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: Day.values
-                              .map((day) => Padding(
-                                    padding: const EdgeInsets.only(right: 8.0, top: 8),
-                                    child: DayCard(
-                                        day: day,
-                                        dayNumber: day.index + 2,
-                                        filled: daysFilledMockedMap[day]!),
-                                  ))
-                              .toList(),
-                        )),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [6, 5, 4, 3, 2, 1, 0].map<Widget>(
+                          (day) {
+                            if (state.attendance != null) {
+                              final now = DateTime.now().subtract(Duration(days: day));
+                              final weekDay = now.weekday - 1;
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0, top: 8),
+                                child: DayCard(
+                                  day: Day.values[weekDay],
+                                  dayNumber: now.day,
+                                  filled: state.attendance![6 - day],
+                                ),
+                              );
+                            } else {
+                              return const Padding(
+                                padding: EdgeInsets.only(right: 8.0, top: 8),
+                                child: ShimmerSkelton(height: 80, width: 60),
+                              );
+                            }
+                          },
+                        ).toList(),
+                      ),
+                    ),
                     const SizedBox(height: 30),
                     RichText(
                       text: TextSpan(
@@ -138,7 +149,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    MoodCounter(isLoading: isHomeLoading),
+                    MoodCounter(isLoading: state.isLoading),
                     const SizedBox(height: 25),
                     Divider(
                         thickness: 1,

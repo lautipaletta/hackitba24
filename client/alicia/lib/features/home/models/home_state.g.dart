@@ -15,6 +15,10 @@ _$HomeStateImpl _$$HomeStateImplFromJson(Map<String, dynamic> json) =>
       ),
       isLoading: json['isLoading'] as bool? ?? false,
       isGeneratingReport: json['isGeneratingReport'] as bool? ?? false,
+      attendance: (json['attendance'] as List<dynamic>?)
+              ?.map((e) => e as bool)
+              .toList() ??
+          null,
     );
 
 Map<String, dynamic> _$$HomeStateImplToJson(_$HomeStateImpl instance) =>
@@ -24,6 +28,7 @@ Map<String, dynamic> _$$HomeStateImplToJson(_$HomeStateImpl instance) =>
       'moodMap': instance.moodMap.map((k, e) => MapEntry(_$MoodEnumMap[k]!, e)),
       'isLoading': instance.isLoading,
       'isGeneratingReport': instance.isGeneratingReport,
+      'attendance': instance.attendance,
     };
 
 const _$MoodEnumMap = {

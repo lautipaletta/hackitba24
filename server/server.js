@@ -114,8 +114,11 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
-    const len = usr.week_attendance.length-1;
-    if(!usr.week_attendance[len]) usr.week_attendance[len] = true;
+    const len = usr.week_attendance.length;
+    if(!usr.week_attendance[len-1]){
+        usr.last_attendance = new Date.now();
+        usr.week_attendance[len-1] = true;
+    }
 
     await usr.save();
 
@@ -123,7 +126,7 @@ app.post('/message', async (req, res) => {
 });
 
 app.get('/get_attendance', async (req, res) => {
-    const usr = User.findById(req.query.user_id);
+    const usr = await User.findById(req.query.user_id);
     if(!usr) return res.sendStatus(400);
     usr.week_attendance = shift_array(usr.week_attendance, Date.now() - new Date(usr.last_attendance));
     await usr.save();
