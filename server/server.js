@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier, get_summary_primary_emotion_from_Felicia } from "./model_requests.js";
 import { Message, User, Session } from "./schemas.js";
 import { generate_report } from "./exporter.js"
-import { ObjectId } from "bson";
 
 const app = express(); 
 const PORT = 3000; 
