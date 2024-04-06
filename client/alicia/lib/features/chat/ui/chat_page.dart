@@ -293,7 +293,7 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
                                         ),
                                         fillColor: AliciaColors.backgroundGray,
                                         filled: true,
-                                        contentPadding: const EdgeInsets.only(left: 16),
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                                         // isDense: true,
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
