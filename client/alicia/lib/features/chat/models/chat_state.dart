@@ -9,6 +9,7 @@ class ChatState with _$ChatState {
     @Default(null) String? prevSessionId,
     @Default([]) List<Message> messages,
     @Default(false) bool sessionStarted,
+    @Default(false) bool sessionTerminated,
     @Default(null) String? error,
     @Default(false) bool isLoading,
     @Default(false) bool aliciaTyping,
