@@ -9,4 +9,5 @@ class Assets {
   static const String circle = 'assets/images/png/circle_background.png';
   static const String circles = 'assets/images/png/circles_background.png';
   static const String typing = 'assets/lotties/typing.json';
+  static const String sttLottie = 'assets/lotties/stt.json';
 }

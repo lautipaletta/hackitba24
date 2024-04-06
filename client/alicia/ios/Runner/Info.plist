@@ -4,6 +4,10 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Alicia requiere el uso de esta característica para reconocer tu voz</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Alicia requiere el uso de esta característica para reconocer tu voz</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

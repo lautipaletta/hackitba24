@@ -1,15 +1,16 @@
 import 'dart:io';
-
 import 'package:alicia/core/assets/assets.dart';
 import 'package:alicia/core/config/style/colors.dart';
 import 'package:alicia/features/chat/providers/chat_provider.dart';
 import 'package:alicia/features/home/providers/home_provider.dart';
+import 'package:alicia/core/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
@@ -18,19 +19,25 @@ class ChatPage extends ConsumerStatefulWidget {
   ChatPageState createState() => ChatPageState();
 }
 
-class ChatPageState extends ConsumerState<ChatPage> {
+class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixin {
   final _messageController = TextEditingController();
 
   final _messagesScrollController = ScrollController();
 
   bool textFieldEmpty = true;
 
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  late final AnimationController _controller;
+
   @override
   void initState() {
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    _speech = stt.SpeechToText();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(chatProvider.notifier).init();
-      _messageController.addListener(_handleMessageChange);
       _scrollToEnd(millis: 0);
+      _messageController.addListener(_handleMessageChange);
     });
     super.initState();
   }
@@ -39,6 +46,8 @@ class ChatPageState extends ConsumerState<ChatPage> {
   void dispose() {
     _messagesScrollController.dispose();
     _messageController.dispose();
+    _controller.dispose();
+    _speech.stop();
     super.dispose();
   }
 
@@ -251,15 +260,19 @@ class ChatPageState extends ConsumerState<ChatPage> {
                                   borderRadius: BorderRadius.circular(16),
                                   child: InkWell(
                                     onTap: () async {
-                                      final content = _messageController.text.trim();
-                                      if (content.isEmpty) return;
-                                      _messageController.clear();
-                                      controller.addUserMessage(content: content);
-                                      _scrollToEnd(millis: 50);
-                                      await controller.sendMessage(
-                                        content: content,
-                                      );
-                                      _scrollToEnd(millis: 50);
+                                      if (!textFieldEmpty && !_isListening) {
+                                        final content = _messageController.text.trim();
+                                        if (content.isEmpty) return;
+                                        _messageController.clear();
+                                        controller.addUserMessage(content: content);
+                                        _scrollToEnd(millis: 50);
+                                        await controller.sendMessage(
+                                          content: content,
+                                        );
+                                        _scrollToEnd(millis: 50);
+                                      } else {
+                                        await _handlelisten();
+                                      }
                                     },
                                     borderRadius: BorderRadius.circular(16),
                                     child: Container(
@@ -267,7 +280,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
                                       ),
-                                      child: !textFieldEmpty
+                                      child: !textFieldEmpty && !_isListening
                                           ? Padding(
                                               padding: const EdgeInsets.fromLTRB(16, 0, 20, 0),
                                               child: Icon(
@@ -276,12 +289,26 @@ class ChatPageState extends ConsumerState<ChatPage> {
                                                 size: 20,
                                               ),
                                             )
-                                          : Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                                              child: SvgPicture.asset(
-                                                Assets.voice,
-                                              ),
-                                            ),
+                                          : _isListening
+                                              ? ColorFiltered(
+                                                  colorFilter: ColorFilter.mode(
+                                                    AliciaColors.backgroundWhite,
+                                                    BlendMode.srcIn,
+                                                  ),
+                                                  child: Lottie.asset(
+                                                    Assets.sttLottie,
+                                                    controller: _controller,
+                                                    repeat: true,
+                                                    width: 60,
+                                                  ),
+                                                )
+                                              : Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                  child: SvgPicture.asset(
+                                                    Assets.voice,
+                                                    width: 60,
+                                                  ),
+                                                ),
                                     ),
                                   ),
                                 ),
@@ -315,6 +342,37 @@ class ChatPageState extends ConsumerState<ChatPage> {
               ),
       ),
     );
+  }
+
+  Future<void> _handlelisten() async {
+    final debouncer = Debouncer(milliseconds: 2500);
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        _controller.repeat();
+        setState(() => _isListening = true);
+        _speech.listen(
+          localeId: "es_US",
+          onResult: (val) {
+            setState(() {
+              _messageController.text = val.recognizedWords;
+            });
+            debouncer.run(() {
+              _controller.stop();
+              setState(() => _isListening = false);
+              _speech.stop();
+            });
+          },
+        );
+      }
+    } else {
+      _controller.stop();
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 }
 
