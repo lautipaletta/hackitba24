@@ -123,7 +123,7 @@ app.post('/message', async (req, res) => {
 });
 
 app.get('/get_attendance', async (req, res) => {
-    const usr = User.findById(req.query.user_id);
+    const usr = await User.findById(req.query.user_id);
     if(!usr) return res.sendStatus(400);
     usr.week_attendance = shift_array(usr.week_attendance, Date.now() - new Date(usr.last_attendance));
     await usr.save();
