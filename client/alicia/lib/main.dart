@@ -58,6 +58,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: MaterialApp.router(
               routerConfig: ref.read(routerProvider),
+              debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 fontFamily: 'Poppins',
                 colorScheme: const ColorScheme.light(
