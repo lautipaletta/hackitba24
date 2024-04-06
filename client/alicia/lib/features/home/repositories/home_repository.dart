@@ -1,8 +1,8 @@
-
 import 'package:alicia/core/common/models/app_exception.dart';
 import 'package:alicia/features/chat/models/session_response.dart';
+import 'package:alicia/features/home/models/attendance_response.dart';
 import 'package:alicia/features/home/models/report_response.dart';
-import 'package:alicia/features/home/services/report_service.dart';
+import 'package:alicia/features/home/services/home_service.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +17,16 @@ class HomeRepository {
 
   Future<Either<AppException, ReportResponse>> getReport({required String userId}) async {
     try {
-      final response = await ref.read(reportServiceProvider).getReport(userId: userId);
+      final response = await ref.read(homeServiceProvider).getReport(userId: userId);
+      return Right(response);
+    } catch (e) {
+      return Left(AppException(message: e.toString()));
+    }
+  }
+
+  Future<Either<AppException, AttendanceResponse>> getAttendance({required String userId}) async {
+    try {
+      final response = await ref.read(homeServiceProvider).getAttendance(userId: userId);
       return Right(response);
     } catch (e) {
       return Left(AppException(message: e.toString()));
