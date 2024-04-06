@@ -19,7 +19,7 @@ app.use("/reports", express.static('reports'));
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
 
-app.get('/hi', (req, res) => res.send("Hi!"));
+app.get('/hi', (req, res) => res.send());
 
 app.post('/create_user', async (req, res) => {
     const usr = new User({name: req.body.name, sessions: [], week_attendance: Array(7).fill(false), emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
@@ -60,7 +60,6 @@ app.get('/get_session', async (req, res) => {
 
 app.get('/get_emotions', async (req, res) => {
     const usr = await User.findById(req.query.user_id);
-
     if (!usr) return res.sendStatus(400);
 
     res.status(200).send(usr.emotional_summary);
@@ -116,7 +115,7 @@ app.post('/message', async (req, res) => {
 
     const len = usr.week_attendance.length;
     if(!usr.week_attendance[len-1]){
-        usr.last_attendance = new Date.now();
+        usr.last_attendance = Date.now();
         usr.week_attendance[len-1] = true;
     }
 
@@ -128,8 +127,12 @@ app.post('/message', async (req, res) => {
 app.get('/get_attendance', async (req, res) => {
     const usr = await User.findById(req.query.user_id);
     if(!usr) return res.sendStatus(400);
-    usr.week_attendance = shift_array(usr.week_attendance, Date.now() - new Date(usr.last_attendance));
-    await usr.save();
+
+    if (usr.last_attendance) {
+        usr.week_attendance = shift_array(usr.week_attendance, Math.floor((Date.now() - usr.last_attendance) / (1000 * 3600 * 24)));
+        await usr.save();
+    }
+
     res.status(200).send({attendance: usr.week_attendance});
 });
 
