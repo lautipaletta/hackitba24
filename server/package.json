@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "server for Alicia",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
   "author": "egrep",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^4.33.0"
+  }
 }
