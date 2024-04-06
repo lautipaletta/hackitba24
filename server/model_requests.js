@@ -10,7 +10,7 @@ const Mauro_system_prompt = fs.readFileSync("./prompts/Mauro_system_prompt.txt")
 
 function message_list_to_conversation_list(messages) {
     return messages.map((message) => {
-        const out = {role: (!message.user_id) ? "assistant" : "user", content: message.content};
+        const out = {content: message.content, role: message.role};
         return out;
     });
 }
@@ -19,18 +19,18 @@ function message_list_to_conversation_string(messages) {
     const conversation = "";
 
     messages.forEach((message) => {
-        conversation += `${(!message.user_id) ? "ALICIA" : "USUARIO"}: ${message.content}`;
+        conversation += `${(message.role == "user") ?  "USUARIO" : "ALICIA"}: ${message.content}`;
     });
 
     return conversation;
 }
 
 async function get_next_message_from_Alicia(messages, prev_summary) {
-    const messages_as_conversation = message_list_to_conversation_list(messages);
+    const message_conversation_list = message_list_to_conversation_list(messages);
     const system_prompt = Alicia_base_system_prompt + (prev_summary ? `Ten en cuenta el siguiente resumen de la última conversación que tuviste con el usuario:\n${prev_summary}` : "");
 
     const completion = await openai.chat.completions.create({
-        messages: [{role: "system", content: system_prompt}, ...messages_as_conversation],
+        messages: [{role: "system", content: system_prompt}, ...message_conversation_list],
         model: "gpt-3.5-turbo"
     })
 
