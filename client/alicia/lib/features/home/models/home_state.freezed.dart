@@ -24,6 +24,7 @@ mixin _$HomeState {
   String get userId => throw _privateConstructorUsedError;
   Map<Mood, int> get moodMap => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isGeneratingReport => throw _privateConstructorUsedError;
   List<bool>? get attendance => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $HomeStateCopyWith<$Res> {
       String userId,
       Map<Mood, int> moodMap,
       bool isLoading,
+      bool isGeneratingReport,
       List<bool>? attendance});
 }
 
@@ -62,6 +64,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? userId = null,
     Object? moodMap = null,
     Object? isLoading = null,
+    Object? isGeneratingReport = null,
     Object? attendance = freezed,
   }) {
     return _then(_value.copyWith(
@@ -80,6 +83,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isGeneratingReport: null == isGeneratingReport
+          ? _value.isGeneratingReport
+          : isGeneratingReport // ignore: cast_nullable_to_non_nullable
               as bool,
       attendance: freezed == attendance
           ? _value.attendance
@@ -102,6 +109,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       String userId,
       Map<Mood, int> moodMap,
       bool isLoading,
+      bool isGeneratingReport,
       List<bool>? attendance});
 }
 
@@ -120,6 +128,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? moodMap = null,
     Object? isLoading = null,
+    Object? isGeneratingReport = null,
     Object? attendance = freezed,
   }) {
     return _then(_$HomeStateImpl(
@@ -139,6 +148,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isGeneratingReport: null == isGeneratingReport
+          ? _value.isGeneratingReport
+          : isGeneratingReport // ignore: cast_nullable_to_non_nullable
+              as bool,
       attendance: freezed == attendance
           ? _value._attendance
           : attendance // ignore: cast_nullable_to_non_nullable
@@ -156,6 +169,7 @@ class _$HomeStateImpl implements _HomeState {
       required this.userId,
       required final Map<Mood, int> moodMap,
       this.isLoading = false,
+      this.isGeneratingReport = false,
       final List<bool>? attendance = null})
       : _moodMap = moodMap,
         _attendance = attendance;
@@ -178,6 +192,9 @@ class _$HomeStateImpl implements _HomeState {
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool isGeneratingReport;
   final List<bool>? _attendance;
   @override
   @JsonKey()
@@ -191,7 +208,7 @@ class _$HomeStateImpl implements _HomeState {
 
   @override
   String toString() {
-    return 'HomeState(userName: $userName, userId: $userId, moodMap: $moodMap, isLoading: $isLoading, attendance: $attendance)';
+    return 'HomeState(userName: $userName, userId: $userId, moodMap: $moodMap, isLoading: $isLoading, isGeneratingReport: $isGeneratingReport, attendance: $attendance)';
   }
 
   @override
@@ -205,6 +222,8 @@ class _$HomeStateImpl implements _HomeState {
             const DeepCollectionEquality().equals(other._moodMap, _moodMap) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.isGeneratingReport, isGeneratingReport) ||
+                other.isGeneratingReport == isGeneratingReport) &&
             const DeepCollectionEquality()
                 .equals(other._attendance, _attendance));
   }
@@ -217,6 +236,7 @@ class _$HomeStateImpl implements _HomeState {
       userId,
       const DeepCollectionEquality().hash(_moodMap),
       isLoading,
+      isGeneratingReport,
       const DeepCollectionEquality().hash(_attendance));
 
   @JsonKey(ignore: true)
@@ -239,6 +259,7 @@ abstract class _HomeState implements HomeState {
       required final String userId,
       required final Map<Mood, int> moodMap,
       final bool isLoading,
+      final bool isGeneratingReport,
       final List<bool>? attendance}) = _$HomeStateImpl;
 
   factory _HomeState.fromJson(Map<String, dynamic> json) =
@@ -252,6 +273,8 @@ abstract class _HomeState implements HomeState {
   Map<Mood, int> get moodMap;
   @override
   bool get isLoading;
+  @override
+  bool get isGeneratingReport;
   @override
   List<bool>? get attendance;
   @override
