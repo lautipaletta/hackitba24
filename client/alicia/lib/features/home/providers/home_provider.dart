@@ -5,7 +5,6 @@ import 'package:alicia/features/home/models/home_state.dart';
 import 'package:alicia/features/home/repositories/home_repository.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
   return HomeNotifier(ref: ref);
@@ -64,12 +63,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(isGeneratingReport: false);
       return Right(ref.read(dioProvider).options.baseUrl + response.right.url);
-      state = state.copyWith(isLoading: false);
-      final dio = ref.read(dioProvider);
-      var dir = await getApplicationDocumentsDirectory();
-      await dio.download(
-          response.right.url, "${dir.path}/report${DateTime.now().millisecondsSinceEpoch}.pdf");
-      return Right(response.right.url);
     }
   }
 
