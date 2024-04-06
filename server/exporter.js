@@ -33,7 +33,7 @@ function generate_report(user_name, user_id, user_summary, report_period, sessio
             .moveDown()
             .font('fonts/Poppins-Medium.ttf')
             .fontSize(16)
-            .text("Fecha: " + session.period)
+            .text("Fecha: " + session.date)
             .moveDown()
             .font('fonts/Poppins-Bold.ttf')
             .fontSize(12)
