@@ -114,7 +114,7 @@ app.post('/message', async (req, res) => {
 
     session.messages.push(next_message);
 
-    //if(usr.week_attendance[6] == 0) usr.week_attendance[6] = 1;
+    if(!usr.week_attendance[6]) usr.week_attendance[6] = true;
 
     await usr.save();
 
@@ -129,7 +129,7 @@ app.get('/get_attendance', (req, res) => {
 });
 
 function shift_array(array, shift){
-    let out = Array(array.length).fill(0);
+    let out = Array(array.length).fill(false);
     for(let i=0; i<array.length-shift; i++){
         out[i] = array[i+shift];
     }
@@ -155,5 +155,10 @@ app.get('/get_report', async (req, res) => {
 });
 
 function period_from_list(list){
+<<<<<<< HEAD
     return `${new Date(list[0].timestamp)} - ${new Date(list[list.length-1].timestamp)}`
 }
+=======
+    return new Date(list[0].timestamp).toLocaleDateString("es-ES") + " - " + new Date(list[list.length-1].timestamp).toLocaleDateString("es-ES");
+}
+>>>>>>> 90657ded4ff05e9eff93234c65206a8ea06ae3dc
