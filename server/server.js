@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { get_next_message_from_Alicia } from "./model_requests";
+import { get_next_message_from_Alicia } from "./model_requests.js";
 
 const app = express(); 
 const PORT = 3000; 
@@ -35,6 +35,10 @@ const User = mongoose.model("User", user);
 
 app.post('/start_session', async (req, res)=>{
     const usr = await User.findById(req.body.user_id).exec();
+    if(!usr){
+        res.status(400).send();
+        return;
+    }
     const prev_session = usr.sessions[usr.sessions.length-1];
     const response_data = {prev_session_id: prev_session._id, messages: prev_session.text};
     const prev_summary = prev_session.summary;
@@ -46,9 +50,16 @@ app.post('/start_session', async (req, res)=>{
     res.status(200).send(JSON.stringify(response_data));
 });
 
-app.get('/get_session', (req, res)=>{
-    console.log(req);
-    res.status(200).send("hello");
+app.get('/get_session', async(req, res)=>{
+    const session = await Session.findById(req.body.session_id);
+    const usr = await User.findById(req.body.user_id);
+    if(!session || !usr){
+        res.status(400).send();
+        return;
+    }
+    const prev_session = usr.sessions[usr.sessions.indexOf(session)-1];
+    const response_data = {prev_session_id: prev_session.session_id, messages: session.text};
+    res.status(200).send(JSON.stringify(response_data));
 });
 
 app.post('/end_session', (req, res)=>{
