@@ -4,8 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class MoodBarChart extends StatefulWidget {
-  const MoodBarChart({super.key});
-
+  const MoodBarChart({super.key, required this.moodMap});
+  final Map<Mood, int> moodMap;
   @override
   State<MoodBarChart> createState() => _MoodBarChartState();
 }
@@ -86,7 +86,7 @@ class _MoodBarChartState extends State<MoodBarChart> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(widget.moodMap),
       gridData: const FlGridData(show: false),
     )
     );
@@ -114,7 +114,9 @@ class _MoodBarChartState extends State<MoodBarChart> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 18,
+            toY: widget.moodMap.values.reduce((value, element) {
+              return value > element ? value : element;
+              }).toDouble()*3,
             color: AliciaColors.backgroundWhite,
           ),
         ),
@@ -123,21 +125,8 @@ class _MoodBarChartState extends State<MoodBarChart> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(5, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
-          case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-          case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
-          case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          default:
-            return throw Error();
-        }
-      });
+  List<BarChartGroupData> showingGroups(Map<Mood, int> moodMap) => List.generate(5, (i){
+    return makeGroupData(i, moodMap[Mood.values[i]]!.toDouble(), isTouched: i == touchedIndex);
+  });
 }
 

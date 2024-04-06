@@ -1,14 +1,14 @@
-import 'package:alicia/core/common/widgets/shimmer_skelton.dart';
 import 'package:alicia/core/config/style/colors.dart';
+import 'package:alicia/features/home/models/mood.dart';
 import 'package:alicia/features/home/widgets/mood_bar_chart.dart';
 import 'package:flutter/material.dart';
 
 class MoodCounter extends StatelessWidget {
-  const MoodCounter({super.key, required this.isLoading});
-  final bool isLoading;
+  const MoodCounter({super.key, required this.moodMap});
+  final Map<Mood, int> moodMap;
   @override
   Widget build(BuildContext context) {
-    return isLoading? const ShimmerSkelton(height: 300, width: double.infinity) : Container(
+    return Container(
       height: 300,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -36,10 +36,12 @@ class MoodCounter extends StatelessWidget {
               ),
             ),
           ),
-          const Center(
+          Center(
             child: Padding(
               padding: EdgeInsets.only(right: 25, left: 25, top: 75),
-              child: MoodBarChart(),
+              child: MoodBarChart(
+                moodMap: moodMap,
+              ),
             )
           ),
         ],

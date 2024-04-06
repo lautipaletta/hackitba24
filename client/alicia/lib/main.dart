@@ -1,5 +1,6 @@
 import 'package:alicia/core/config/routes/router.dart';
 import 'package:alicia/features/chat/providers/chat_provider.dart';
+import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,10 +33,12 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final chatState = globalRef!.read(chatProvider);
     final chatController = globalRef!.read(chatProvider.notifier);
+    final homeState = globalRef!.read(homeProvider.notifier);
     if (state != AppLifecycleState.resumed) {
       if (globalRef == null) return;
       if (chatState.sessionStarted && !chatState.sessionTerminated) {
         chatController.endSession();
+        homeState.getMoodMap();
       }
     } else {
       if (chatState.sessionTerminated) {

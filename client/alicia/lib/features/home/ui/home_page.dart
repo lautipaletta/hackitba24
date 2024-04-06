@@ -149,7 +149,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    MoodCounter(isLoading: state.isLoading),
+                    (state.isLoading) ? const ShimmerSkelton(height: 300, width: double.infinity) : MoodCounter(moodMap: state.moodMap),
                     const SizedBox(height: 25),
                     Divider(
                         thickness: 1,
