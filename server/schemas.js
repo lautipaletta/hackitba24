@@ -18,6 +18,7 @@ const Session = mongoose.model("Session", session);
 
 const user = new mongoose.Schema({
     name: String,
+    summary: String,
     sessions: [session]
 });
 
