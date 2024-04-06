@@ -44,14 +44,15 @@ const User = mongoose.model("User", user);
 app.post('/start_session', async (req, res)=>{
     const usr = await User.findById(req.body.user_id).exec();
     if(!usr){
-        res.status(400).send();
-        return;
+        return res.sendStatus(400);
     }
     const prev_session = usr.sessions[usr.sessions.length-1];
-    const response_data = {prev_session_id: prev_session._id, messages: prev_session.text};
+    const response_data = {prev_session_id: prev_session._id, messages: prev_session.messages};
     const prev_summary = prev_session.summary;
-    const opening_message = await get_next_message_from_Alicia([], prev_summary);
-    const session = new Session({text: [opening_message], summary: null, timestamp: Date.now()});
+    const opening_text = await get_next_message_from_Alicia([], prev_summary);
+    const opening_message = new Message({content: opening_text, timestamp: Date.now(), role:"assistant"});
+    await opening_message.save();
+    const session = new Session({messages: [opening_message], summary: null, timestamp: Date.now()});
     await session.save();
     usr.sessions.push(session);
     await usr.save();
@@ -62,11 +63,10 @@ app.get('/get_session', async(req, res)=>{
     const session = await Session.findById(req.body.session_id);
     const usr = await User.findById(req.body.user_id);
     if(!session || !usr){
-        res.status(400).send();
-        return;
+        return res.sendStatus(400);
     }
     const prev_session = usr.sessions[usr.sessions.indexOf(session)-1];
-    const response_data = {prev_session_id: prev_session.session_id, messages: session.text};
+    const response_data = {prev_session_id: prev_session.session_id, messages: session.messages};
     res.status(200).send(JSON.stringify(response_data));
 });
 
