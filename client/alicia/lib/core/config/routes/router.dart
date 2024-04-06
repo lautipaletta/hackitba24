@@ -15,10 +15,12 @@ final routerProvider = Provider(
       initialLocation: Routes.home.path,
       routes: [
         GoRoute(
+          name: Routes.home.name,
           path: Routes.home.path,
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
+          name: Routes.chat.name,
           path: Routes.chat.path,
           builder: (context, state) => const ChatPage(),
         ),
