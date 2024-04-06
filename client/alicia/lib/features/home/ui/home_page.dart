@@ -1,15 +1,36 @@
+import 'package:alicia/core/common/widgets/shimmer_skelton.dart';
 import 'package:alicia/core/config/style/colors.dart';
 import 'package:alicia/features/home/models/day.dart';
+import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:alicia/features/home/widgets/alicia_fab.dart';
 import 'package:alicia/features/home/widgets/day_card.dart';
 import 'package:alicia/features/home/widgets/mood_counter.dart';
+import 'package:alicia/features/home/widgets/report_button.dart';
 import 'package:alicia/features/home/widgets/report_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
+
+  @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      ref.read(homeProvider.notifier).init();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool isHomeLoading = ref.watch(homeProvider).isLoading;
+    final homePageProvider = ref.read(homeProvider);
     return Scaffold(
       floatingActionButton: const AliciaFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -30,6 +51,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    isHomeLoading? ShimmerSkelton(height: 30, width: double.infinity) :
                     RichText(
                       text: TextSpan(
                         style: Theme.of(context).textTheme.displayLarge,
@@ -40,7 +62,7 @@ class HomePage extends StatelessWidget {
                                 TextStyle(color: AliciaColors.darkText, fontSize: 25, fontFamily: 'Poppins'),
                           ),
                           TextSpan(
-                            text: 'Lautaro',
+                            text: homePageProvider.userName,
                             style: TextStyle(
                                 color: AliciaColors.darkText,
                                 fontSize: 25,
@@ -116,7 +138,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const MoodCounter(),
+                    MoodCounter(isLoading: isHomeLoading),
                     const SizedBox(height: 25),
                     Divider(
                         thickness: 1,
@@ -204,7 +226,7 @@ class HomePage extends StatelessWidget {
                                 )),
                           ),
                           const SizedBox(height: 20),
-                          const ReportContainer()
+                          const ReportButton()
                         ],
                       ),
                     ),
