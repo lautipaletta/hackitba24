@@ -14,8 +14,7 @@ class _MoodBarChartState extends State<MoodBarChart> {
   int touchedIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
+    return BarChart(BarChartData(
       alignment: BarChartAlignment.spaceBetween,
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -67,13 +66,13 @@ class _MoodBarChartState extends State<MoodBarChart> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (value, meta) => SideTitleWidget(
-              axisSide: meta.axisSide,
-              space: 8,
-              child: Text(Mood.values[value.toInt()].label, style: TextStyle(
-              color: AliciaColors.darkText,
-              fontSize: 13,
-            ))
-            ),
+                axisSide: meta.axisSide,
+                space: 8,
+                child: Text(Mood.values[value.toInt()].label,
+                    style: TextStyle(
+                      color: AliciaColors.darkText,
+                      fontSize: 13,
+                    ))),
             reservedSize: 45,
           ),
         ),
@@ -88,8 +87,7 @@ class _MoodBarChartState extends State<MoodBarChart> {
       ),
       barGroups: showingGroups(widget.moodMap),
       gridData: const FlGridData(show: false),
-    )
-    );
+    ));
   }
 
   BarChartGroupData makeGroupData(
@@ -101,6 +99,11 @@ class _MoodBarChartState extends State<MoodBarChart> {
     List<int> showTooltips = const [],
   }) {
     barColor ??= Mood.values[x].color;
+    double toY = widget.moodMap.values.reduce((value, element) {
+          return value > element ? value : element;
+        }).toDouble() *
+        3;
+    if (toY == 0) toY = 1;
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -114,9 +117,7 @@ class _MoodBarChartState extends State<MoodBarChart> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: widget.moodMap.values.reduce((value, element) {
-              return value > element ? value : element;
-              }).toDouble()*3,
+            toY: toY,
             color: AliciaColors.backgroundWhite,
           ),
         ),
@@ -125,8 +126,7 @@ class _MoodBarChartState extends State<MoodBarChart> {
     );
   }
 
-  List<BarChartGroupData> showingGroups(Map<Mood, int> moodMap) => List.generate(5, (i){
-    return makeGroupData(i, moodMap[Mood.values[i]]!.toDouble(), isTouched: i == touchedIndex);
-  });
+  List<BarChartGroupData> showingGroups(Map<Mood, int> moodMap) => List.generate(5, (i) {
+        return makeGroupData(i, moodMap[Mood.values[i]]!.toDouble(), isTouched: i == touchedIndex);
+      });
 }
-
