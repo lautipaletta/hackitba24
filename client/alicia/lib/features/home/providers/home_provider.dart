@@ -32,31 +32,43 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return Left(response.left);
     } else {
       state = state.copyWith(userId: response.right);
-      response = await ref
-          .read(hiveRepositoryProvider)
-          .read(boxName: AliciaHiveBox.ALICIA_BOX, key: AliciaHiveBox.USER_NAME);
+      response = await ref.read(hiveRepositoryProvider).read(
+          boxName: AliciaHiveBox.ALICIA_BOX, key: AliciaHiveBox.USER_NAME);
       if (response.isLeft) {
         state = state.copyWith(isLoading: false);
         return Left(response.left);
       } else {
         state = state.copyWith(userName: response.right);
-        response = await ref.read(homeRepositoryProvider).getAttendance(userId: state.userId);
+        response = await ref
+            .read(homeRepositoryProvider)
+            .getAttendance(userId: state.userId);
         if (response.isLeft) {
           state = state.copyWith(isLoading: false);
           return Left(response.left);
         } else {
           state = state.copyWith(attendance: response.right.attendance);
+          response = await ref
+              .read(homeRepositoryProvider)
+              .getMoodMap(userId: state.userId);
+          if (response.isLeft) {
+            state = state.copyWith(isLoading: false);
+            return Left(response.left);
+          } else {
+            state = state.copyWith(moodMap: response.right);
+          }
         }
+        state = state.copyWith(isLoading: false);
+        print("User ID: ${state.userId}, User Name: ${state.userName}");
+        print("Mood Map: ${state.moodMap}");
+        return const Right(null);
       }
-      state = state.copyWith(isLoading: false);
-      print("User ID: ${state.userId}, User Name: ${state.userName}");
-      return const Right(null);
     }
   }
 
   Future<Either<AppException, String>> getReport() async {
     state = state.copyWith(isGeneratingReport: true);
-    final response = await ref.read(homeRepositoryProvider).getReport(userId: state.userId);
+    final response =
+        await ref.read(homeRepositoryProvider).getReport(userId: state.userId);
     if (response.isLeft) {
       state = state.copyWith(isGeneratingReport: false);
       return Left(response.left);
@@ -73,6 +85,18 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return Left(response.left);
     } else {
       state = state.copyWith(attendance: response.right.attendance);
+      return const Right(null);
+    }
+  }
+
+  Future<Either<AppException, void>> getMoodMap() async {
+    state = state.copyWith(isLoading: true);
+    final response = await ref.read(homeRepositoryProvider).getMoodMap(userId: state.userId);
+    if (response.isLeft) {
+      state = state.copyWith(isLoading: false);
+      return Left(response.left);
+    } else {
+      state = state.copyWith(moodMap: response.right, isLoading: false);
       return const Right(null);
     }
   }

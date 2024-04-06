@@ -1,5 +1,6 @@
 import 'package:alicia/core/common/providers/dio_provider.dart';
 import 'package:alicia/features/home/models/attendance_response.dart';
+import 'package:alicia/features/home/models/mood_map_response.dart';
 import 'package:alicia/features/home/models/report_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
@@ -23,6 +24,11 @@ abstract class HomeService {
 
   @GET('/get_attendance')
   Future<AttendanceResponse> getAttendance({
+    @Query('user_id') required String userId,
+  });
+
+  @GET('/get_emotions')
+  Future<MoodMapResponse> getMoodMap({
     @Query('user_id') required String userId,
   });
 }
