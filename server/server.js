@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 const app = express(); 
 const PORT = 3000; 
 
+app.use(express.json());
+
 app.listen(PORT, (error) =>{ 
     if(!error) 
         console.log("Server is Successfully Running, and App is listening on port "+ PORT) 
@@ -30,34 +32,25 @@ const user = new mongoose.Schema({
 
 const User = mongoose.model("User", user);
 
-const database = new mongoose.Schema({
-    users: [user]
+
+
+app.post('/start_session', async (req, res)=>{
+    let usr = await User.findById(req.body.user_id).exec();
+    console.log(usr);
+    res.status(200).send("hello");
 });
 
-const Database = mongoose.model("Database", database);
-
-// Juan
-const juan = new User({_id: "1234", name:"juan", sessions: []});
-
-const db = new Database({users:[juan]});
-console.log(db);
-
-app.get('/start_session', (req, res)=>{ 
+app.get('/get_session', (req, res)=>{
     console.log(req);
     res.status(200).send("hello");
 });
 
-app.get('/get_session', (req, res)=>{ 
+app.post('/end_session', (req, res)=>{
     console.log(req);
     res.status(200).send("hello");
 });
 
-app.get('/end_session', (req, res)=>{ 
-    console.log(req);
-    res.status(200).send("hello");
-});
-
-app.get('/message', (req, res)=>{ 
+app.post('/message', (req, res)=>{
     console.log(req);
     res.status(200).send("hello");
 });
