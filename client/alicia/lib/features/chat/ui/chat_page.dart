@@ -1,11 +1,12 @@
 import 'dart:io';
-
 import 'package:alicia/core/assets/assets.dart';
 import 'package:alicia/core/config/style/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -14,17 +15,26 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final _messageController = TextEditingController();
 
   final _messagesScrollController = ScrollController();
 
   bool textFieldEmpty = true;
 
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  late final AnimationController _controller;
+
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _speech = stt.SpeechToText();
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
+    _controller.stop();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       _messageController.addListener(_handleMessageChange);
+      final locales = await _speech.locales();
       _scrollToEnd(millis: 0);
     });
     super.initState();
@@ -34,6 +44,7 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     _messagesScrollController.dispose();
     _messageController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -84,13 +95,15 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      onPressed: () => context.pop(),
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        color: AliciaColors.backgroundGray,
-                      ),
-                    ),
+                    child: 
+                    Lottie.asset(Assets.sttLottie, width: 30)
+                    // IconButton(
+                    //   onPressed: () => context.pop(),
+                    //   icon: Icon(
+                    //     Icons.arrow_back_ios_new,
+                    //     color: AliciaColors.backgroundGray,
+                    //   ),
+                    // ),
                   ),
                   Center(
                     child: Material(
@@ -218,7 +231,11 @@ class _ChatPageState extends State<ChatPage> {
                         color: AliciaColors.buttonPurple,
                         borderRadius: BorderRadius.circular(16),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () async {
+                            if (textFieldEmpty) {
+                              await _handlelisten();
+                            }
+                          },
                           borderRadius: BorderRadius.circular(16),
                           child: Container(
                             height: 45,
@@ -236,9 +253,13 @@ class _ChatPageState extends State<ChatPage> {
                                   )
                                 : Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                                    child: SvgPicture.asset(
-                                      Assets.voice,
-                                    ),
+                                    child: Center(
+                                      child: Lottie.asset(
+                                        Assets.sttLottie,
+                                        controller: _controller,
+                                        repeat: true
+                                        ),
+                                    )
                                   ),
                           ),
                         ),
@@ -264,6 +285,29 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _handlelisten() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        _controller.forward();
+        setState(() => _isListening = true);
+        _speech.listen(
+          localeId: "es_US",
+          onResult: (val) => setState(() {
+            _messageController.text = val.recognizedWords;
+          }),
+        );
+      }
+    } else {
+      _controller.stop();
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 }
 
