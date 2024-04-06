@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import { get_next_message_from_Alicia, get_session_summary_from_Mauro } from "./model_requests.js";
+import { get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier } from "./model_requests.js";
 import { Message, User, Session } from "./schemas.js";
 import { generate_report } from "./exporter.js"
+import { ObjectId } from "bson";
 
 const app = express(); 
 const PORT = 3000; 
@@ -18,6 +19,19 @@ app.use('/report', express.static('reports'))
 
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
+
+const juan = new User({name: "Juan", sessions: [], _id: new ObjectId("6610ebbe9a26fa276452bfae")});
+console.log(juan);
+juan.save();
+
+app.get('/hi', (req, res) => res.send("Hi!"));
+
+app.post('/create_user', async (req, res) => {
+    const usr = new User({name: req.body.name, sessions: []});
+    await usr.save();
+
+    res.status(200).send({user_id: usr._id});
+});
 
 app.post('/start_session', async (req, res) => {
     const usr = await User.findById(req.body.user_id).exec();
@@ -41,14 +55,14 @@ app.post('/start_session', async (req, res) => {
 });
 
 app.get('/get_session', async (req, res) => {
-    const session = await Session.findById(req.query.session_id);
     const usr = await User.findById(req.query.user_id);
+    const session = usr.sessions.find(session => session._id == req.query.session_id);
 
     if (!session || !usr) return res.sendStatus(400);
 
-    const prev_session = usr.sessions[usr.sessions.indexOf(session) - 1];
+    const prev_session = usr.sessions[usr.sessions.findIndex(session => session._id == req.query.session_id) - 1];
 
-    res.status(200).send({prev_session_id: prev_session?.session_id, messages: session.messages});
+    res.status(200).send({prev_session_id: prev_session?._id, messages: session.messages});
 });
 
 app.post('/end_session', async (req, res) => {
@@ -65,6 +79,8 @@ app.post('/end_session', async (req, res) => {
     else {
         session.summary = await get_session_summary_from_Mauro(session.messages);
         await session.save();
+
+        usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
     }
 
     await usr.save();

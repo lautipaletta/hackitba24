@@ -18,9 +18,8 @@ class ChatRepository {
 
   Future<Either<AppException, SessionResponse>> startSession() async {
     try {
-      // TODO: usar user_id que sirva
       final response = await ref.read(chatServiceProvider).startSession(
-            body: UserBody(userId: '1'),
+            body: UserBody(userId: '6610ebbe9a26fa276452bfae'),
           );
       return Right(response);
     } catch (e) {
@@ -30,9 +29,8 @@ class ChatRepository {
 
   Future<Either<AppException, void>> endSession() async {
     try {
-      // TODO: usar user_id que sirva
       await ref.read(chatServiceProvider).endSession(
-            body: UserBody(userId: '1'),
+            body: UserBody(userId: '6610ebbe9a26fa276452bfae'),
           );
       return const Right(null);
     } catch (e) {
@@ -42,11 +40,10 @@ class ChatRepository {
 
   Future<Either<AppException, Message>> message({required String content}) async {
     try {
-      // TODO: usar user_id que sirva
       final response = await ref.read(chatServiceProvider).message(
             body: MessageBody(
               content: content,
-              userId: '1',
+              userId: '6610ebbe9a26fa276452bfae',
             ),
           );
       return Right(response);
@@ -57,7 +54,10 @@ class ChatRepository {
 
   Future<Either<AppException, SessionResponse>> getSession({required String sessionId}) async {
     try {
-      final response = await ref.read(chatServiceProvider).getSession(sessionId: sessionId);
+      final response = await ref.read(chatServiceProvider).getSession(
+            sessionId: sessionId,
+            userId: '6610ebbe9a26fa276452bfae',
+          );
       return Right(response);
     } catch (e) {
       return Left(AppException(message: e.toString()));
