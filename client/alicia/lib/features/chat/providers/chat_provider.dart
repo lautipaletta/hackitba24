@@ -24,7 +24,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
   void init() async {
     if (!state.sessionStarted) {
       state = state.copyWith(isLoading: true, error: null);
-      final response = await ref.read(chatRepositoryProvider).startSession(userId: ref.read(homeProvider).userId);
+      final response =
+          await ref.read(chatRepositoryProvider).startSession(userId: ref.read(homeProvider).userId);
       if (response.isLeft) {
         state = state.copyWith(isLoading: false, error: response.left.message);
         return;
@@ -48,8 +49,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
   }
 
-  Future<Either<AppException, void>> sendMessage({required String content}) async {
-    final response = await ref.read(chatRepositoryProvider).message(content: content, userId: ref.read(homeProvider).userId);
+  Future<Either<AppException, String>> sendMessage({required String content}) async {
+    final response = await ref
+        .read(chatRepositoryProvider)
+        .message(content: content, userId: ref.read(homeProvider).userId);
     if (response.isLeft) {
       state = state.copyWith(aliciaTyping: false);
       return Left(response.left);
@@ -58,7 +61,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
       messages: state.messages + [response.right],
       aliciaTyping: false,
     );
-    return const Right(null);
+    return Right(response.right.content);
   }
 
   Future<void> endSession() async {
@@ -69,7 +72,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
   Future<Either<AppException, void>> loadMoreSessions() async {
     if (state.isLoadingMore || state.prevSessionId == null) return const Right(null);
     state = state.copyWith(isLoadingMore: true);
-    final response = await ref.read(chatRepositoryProvider).getSession(sessionId: state.prevSessionId!, userId: ref.read(homeProvider).userId);
+    final response = await ref
+        .read(chatRepositoryProvider)
+        .getSession(sessionId: state.prevSessionId!, userId: ref.read(homeProvider).userId);
     if (response.isLeft) {
       state = state.copyWith(isLoadingMore: false);
       return Left(response.left);

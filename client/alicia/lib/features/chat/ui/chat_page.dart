@@ -7,10 +7,11 @@ import 'package:alicia/core/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:speech_to_text/speech_to_text.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
@@ -26,14 +27,18 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
 
   bool textFieldEmpty = true;
 
-  late stt.SpeechToText _speech;
+  late SpeechToText _speech;
+  late FlutterTts _flutterTts;
   bool _isListening = false;
+  bool _isPlaying = false;
   late final AnimationController _controller;
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    _speech = stt.SpeechToText();
+    _speech = SpeechToText();
+
+    _initTts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(chatProvider.notifier).init();
       _scrollToEnd(millis: 0);
@@ -48,7 +53,59 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
     _messageController.dispose();
     _controller.dispose();
     _speech.stop();
+    _flutterTts.stop();
     super.dispose();
+  }
+
+  void _initTts() async {
+    _flutterTts = FlutterTts();
+    await _flutterTts.setSpeechRate(0.5);
+    await _flutterTts.awaitSpeakCompletion(true);
+    await _flutterTts.setVolume(1.0);
+    await _flutterTts.setPitch(1.0);
+    await _flutterTts.setLanguage('es-ES');
+
+    await _flutterTts.setSharedInstance(true);
+    await _flutterTts.setIosAudioCategory(
+      IosTextToSpeechAudioCategory.playback,
+      [
+        IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+        IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+        IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+        IosTextToSpeechAudioCategoryOptions.defaultToSpeaker
+      ],
+      IosTextToSpeechAudioMode.defaultMode,
+    );
+
+    _flutterTts.setStartHandler(() {
+      setState(() {
+        _isPlaying = true;
+      });
+    });
+
+    _flutterTts.setCompletionHandler(() {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
+
+    _flutterTts.setErrorHandler((msg) {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
+
+    _flutterTts.setCancelHandler(() {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
+
+    _flutterTts.setPauseHandler(() {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
   }
 
   void _scrollToTop() {
@@ -260,16 +317,25 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
                                   borderRadius: BorderRadius.circular(16),
                                   child: InkWell(
                                     onTap: () async {
+                                      if (_isPlaying) {
+                                        await _flutterTts.stop();
+                                        setState(() {
+                                          _isPlaying = false;
+                                        });
+                                      }
                                       if (!textFieldEmpty && !_isListening) {
                                         final content = _messageController.text.trim();
                                         if (content.isEmpty) return;
                                         _messageController.clear();
                                         controller.addUserMessage(content: content);
                                         _scrollToEnd(millis: 50);
-                                        await controller.sendMessage(
+                                        final result = await controller.sendMessage(
                                           content: content,
                                         );
                                         _scrollToEnd(millis: 50);
+                                        if (result.isRight) {
+                                          await _flutterTts.speak(result.right);
+                                        }
                                       } else {
                                         await _handlelisten();
                                       }
