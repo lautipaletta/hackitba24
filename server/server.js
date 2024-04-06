@@ -67,6 +67,7 @@ app.post('/end_session', async (req, res) => {
     if (!usr) return res.sendStatus(400);
 
     const session = usr.sessions[usr.sessions.length - 1];
+    if (!session) return res.sendStatus(400);
 
     if (session.messages.length <= 1) {
         usr.sessions.pop();

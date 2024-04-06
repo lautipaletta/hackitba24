@@ -16,9 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ChatState {
+  String? get prevSessionId => throw _privateConstructorUsedError;
   List<Message> get messages => throw _privateConstructorUsedError;
   bool get sessionStarted => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get aliciaTyping => throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,9 +35,12 @@ abstract class $ChatStateCopyWith<$Res> {
       _$ChatStateCopyWithImpl<$Res, ChatState>;
   @useResult
   $Res call(
-      {List<Message> messages,
+      {String? prevSessionId,
+      List<Message> messages,
       bool sessionStarted,
+      String? error,
       bool isLoading,
+      bool aliciaTyping,
       bool isLoadingMore});
 }
 
@@ -51,12 +57,19 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prevSessionId = freezed,
     Object? messages = null,
     Object? sessionStarted = null,
+    Object? error = freezed,
     Object? isLoading = null,
+    Object? aliciaTyping = null,
     Object? isLoadingMore = null,
   }) {
     return _then(_value.copyWith(
+      prevSessionId: freezed == prevSessionId
+          ? _value.prevSessionId
+          : prevSessionId // ignore: cast_nullable_to_non_nullable
+              as String?,
       messages: null == messages
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -65,9 +78,17 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
           ? _value.sessionStarted
           : sessionStarted // ignore: cast_nullable_to_non_nullable
               as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      aliciaTyping: null == aliciaTyping
+          ? _value.aliciaTyping
+          : aliciaTyping // ignore: cast_nullable_to_non_nullable
               as bool,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -86,9 +107,12 @@ abstract class _$$ChatStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Message> messages,
+      {String? prevSessionId,
+      List<Message> messages,
       bool sessionStarted,
+      String? error,
       bool isLoading,
+      bool aliciaTyping,
       bool isLoadingMore});
 }
 
@@ -103,12 +127,19 @@ class __$$ChatStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prevSessionId = freezed,
     Object? messages = null,
     Object? sessionStarted = null,
+    Object? error = freezed,
     Object? isLoading = null,
+    Object? aliciaTyping = null,
     Object? isLoadingMore = null,
   }) {
     return _then(_$ChatStateImpl(
+      prevSessionId: freezed == prevSessionId
+          ? _value.prevSessionId
+          : prevSessionId // ignore: cast_nullable_to_non_nullable
+              as String?,
       messages: null == messages
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -117,9 +148,17 @@ class __$$ChatStateImplCopyWithImpl<$Res>
           ? _value.sessionStarted
           : sessionStarted // ignore: cast_nullable_to_non_nullable
               as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      aliciaTyping: null == aliciaTyping
+          ? _value.aliciaTyping
+          : aliciaTyping // ignore: cast_nullable_to_non_nullable
               as bool,
       isLoadingMore: null == isLoadingMore
           ? _value.isLoadingMore
@@ -133,12 +172,18 @@ class __$$ChatStateImplCopyWithImpl<$Res>
 
 class _$ChatStateImpl implements _ChatState {
   const _$ChatStateImpl(
-      {final List<Message> messages = const [],
+      {this.prevSessionId = null,
+      final List<Message> messages = const [],
       this.sessionStarted = false,
+      this.error = null,
       this.isLoading = false,
+      this.aliciaTyping = false,
       this.isLoadingMore = false})
       : _messages = messages;
 
+  @override
+  @JsonKey()
+  final String? prevSessionId;
   final List<Message> _messages;
   @override
   @JsonKey()
@@ -153,14 +198,20 @@ class _$ChatStateImpl implements _ChatState {
   final bool sessionStarted;
   @override
   @JsonKey()
+  final String? error;
+  @override
+  @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool aliciaTyping;
   @override
   @JsonKey()
   final bool isLoadingMore;
 
   @override
   String toString() {
-    return 'ChatState(messages: $messages, sessionStarted: $sessionStarted, isLoading: $isLoading, isLoadingMore: $isLoadingMore)';
+    return 'ChatState(prevSessionId: $prevSessionId, messages: $messages, sessionStarted: $sessionStarted, error: $error, isLoading: $isLoading, aliciaTyping: $aliciaTyping, isLoadingMore: $isLoadingMore)';
   }
 
   @override
@@ -168,11 +219,16 @@ class _$ChatStateImpl implements _ChatState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChatStateImpl &&
+            (identical(other.prevSessionId, prevSessionId) ||
+                other.prevSessionId == prevSessionId) &&
             const DeepCollectionEquality().equals(other._messages, _messages) &&
             (identical(other.sessionStarted, sessionStarted) ||
                 other.sessionStarted == sessionStarted) &&
+            (identical(other.error, error) || other.error == error) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.aliciaTyping, aliciaTyping) ||
+                other.aliciaTyping == aliciaTyping) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore));
   }
@@ -180,9 +236,12 @@ class _$ChatStateImpl implements _ChatState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      prevSessionId,
       const DeepCollectionEquality().hash(_messages),
       sessionStarted,
+      error,
       isLoading,
+      aliciaTyping,
       isLoadingMore);
 
   @JsonKey(ignore: true)
@@ -194,17 +253,26 @@ class _$ChatStateImpl implements _ChatState {
 
 abstract class _ChatState implements ChatState {
   const factory _ChatState(
-      {final List<Message> messages,
+      {final String? prevSessionId,
+      final List<Message> messages,
       final bool sessionStarted,
+      final String? error,
       final bool isLoading,
+      final bool aliciaTyping,
       final bool isLoadingMore}) = _$ChatStateImpl;
 
+  @override
+  String? get prevSessionId;
   @override
   List<Message> get messages;
   @override
   bool get sessionStarted;
   @override
+  String? get error;
+  @override
   bool get isLoading;
+  @override
+  bool get aliciaTyping;
   @override
   bool get isLoadingMore;
   @override

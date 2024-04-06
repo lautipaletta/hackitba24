@@ -6,12 +6,12 @@ part 'session_response.g.dart';
 @JsonSerializable()
 class SessionResponse {
   @JsonKey(name: 'prev_session_id')
-  final String prevSessionId;
+  final String? prevSessionId;
   final List<Message> messages;
 
   SessionResponse({
-    required this.prevSessionId,
     required this.messages,
+    this.prevSessionId,
   });
 
   factory SessionResponse.fromJson(Map<String, dynamic> json) => _$SessionResponseFromJson(json);

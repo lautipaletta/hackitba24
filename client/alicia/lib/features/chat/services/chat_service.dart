@@ -18,15 +18,18 @@ final chatServiceProvider = Provider<ChatService>((ref) {
 abstract class ChatService {
   factory ChatService(Dio dio, {String baseUrl}) = _ChatService;
 
-  @POST('/startSession')
+  @POST('/start_session')
   Future<SessionResponse> startSession({@Body() required UserBody body});
 
-  @POST('/endSession')
+  @POST('/end_session')
   Future<void> endSession({@Body() required UserBody body});
 
   @POST('/message')
   Future<Message> message({@Body() required MessageBody body});
 
-  @GET('/getSession')
-  Future<SessionResponse> getSession({@Query('session_id') required String sessionId});
+  @GET('/get_session')
+  Future<SessionResponse> getSession({
+    @Query('session_id') required String sessionId,
+    @Query('user_id') required String userId,
+  });
 }
