@@ -149,7 +149,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    (state.isLoading) ? const ShimmerSkelton(height: 300, width: double.infinity) : MoodCounter(moodMap: state.moodMap),
+                    (state.isLoading)
+                        ? const ShimmerSkelton(height: 300, width: double.infinity)
+                        : MoodCounter(moodMap: state.moodMap),
                     const SizedBox(height: 25),
                     Divider(
                         thickness: 1,
@@ -241,23 +243,24 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 90),
+                    const SizedBox(height: 150),
                   ],
                 ),
               ),
             ),
           ),
-          if (ref.watch(homeProvider).isGeneratingReport) Positioned(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: AliciaColors.backgroundGray.withOpacity(0.6),
-              child: Center(
-                child: CircularProgressIndicator(
+          if (ref.watch(homeProvider).isGeneratingReport)
+            Positioned(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: AliciaColors.backgroundGray.withOpacity(0.6),
+                child: Center(
+                    child: CircularProgressIndicator(
                   color: AliciaColors.lightPurple,
-                )
+                )),
               ),
-            ),),
+            ),
         ],
       ),
     );
