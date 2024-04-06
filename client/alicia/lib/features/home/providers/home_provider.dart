@@ -42,18 +42,15 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  Future<Either<AppException, String>> getReportUrl() async {
-    state = state.copyWith(isLoading: true);
+  Future<Either<AppException, String>> getReport() async {
+    state = state.copyWith(isGeneratingReport: true);
     final response = await ref.read(homeRepositoryProvider).getReport(userId: state.userId);
     if (response.isLeft) {
-      state = state.copyWith(isLoading: false);
+      state = state.copyWith(isGeneratingReport: false);
       return Left(response.left);
     } else {
-      state = state.copyWith(isLoading: false);
-      final dio = ref.read(dioProvider);
-      var dir = await getApplicationDocumentsDirectory();
-      await dio.download(response.right.url, "${dir.path}/report${DateTime.now().millisecondsSinceEpoch}.pdf");
-      return Right(response.right.url);
+      state = state.copyWith(isGeneratingReport: false);
+      return Right(ref.read(dioProvider).options.baseUrl + response.right.url);
     }
   }
 

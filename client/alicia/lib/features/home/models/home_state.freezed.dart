@@ -24,6 +24,7 @@ mixin _$HomeState {
   String get userId => throw _privateConstructorUsedError;
   Map<Mood, int> get moodMap => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isGeneratingReport => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +38,11 @@ abstract class $HomeStateCopyWith<$Res> {
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
-      {String userName, String userId, Map<Mood, int> moodMap, bool isLoading});
+      {String userName,
+      String userId,
+      Map<Mood, int> moodMap,
+      bool isLoading,
+      bool isGeneratingReport});
 }
 
 /// @nodoc
@@ -57,6 +62,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? userId = null,
     Object? moodMap = null,
     Object? isLoading = null,
+    Object? isGeneratingReport = null,
   }) {
     return _then(_value.copyWith(
       userName: null == userName
@@ -75,6 +81,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isGeneratingReport: null == isGeneratingReport
+          ? _value.isGeneratingReport
+          : isGeneratingReport // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -88,7 +98,11 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userName, String userId, Map<Mood, int> moodMap, bool isLoading});
+      {String userName,
+      String userId,
+      Map<Mood, int> moodMap,
+      bool isLoading,
+      bool isGeneratingReport});
 }
 
 /// @nodoc
@@ -106,6 +120,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? moodMap = null,
     Object? isLoading = null,
+    Object? isGeneratingReport = null,
   }) {
     return _then(_$HomeStateImpl(
       userName: null == userName
@@ -124,6 +139,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isGeneratingReport: null == isGeneratingReport
+          ? _value.isGeneratingReport
+          : isGeneratingReport // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -136,7 +155,8 @@ class _$HomeStateImpl implements _HomeState {
       {required this.userName,
       required this.userId,
       required final Map<Mood, int> moodMap,
-      this.isLoading = false})
+      this.isLoading = false,
+      this.isGeneratingReport = false})
       : _moodMap = moodMap;
 
   factory _$HomeStateImpl.fromJson(Map<String, dynamic> json) =>
@@ -157,10 +177,13 @@ class _$HomeStateImpl implements _HomeState {
   @override
   @JsonKey()
   final bool isLoading;
+  @override
+  @JsonKey()
+  final bool isGeneratingReport;
 
   @override
   String toString() {
-    return 'HomeState(userName: $userName, userId: $userId, moodMap: $moodMap, isLoading: $isLoading)';
+    return 'HomeState(userName: $userName, userId: $userId, moodMap: $moodMap, isLoading: $isLoading, isGeneratingReport: $isGeneratingReport)';
   }
 
   @override
@@ -173,13 +196,20 @@ class _$HomeStateImpl implements _HomeState {
             (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other._moodMap, _moodMap) &&
             (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading));
+                other.isLoading == isLoading) &&
+            (identical(other.isGeneratingReport, isGeneratingReport) ||
+                other.isGeneratingReport == isGeneratingReport));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userName, userId,
-      const DeepCollectionEquality().hash(_moodMap), isLoading);
+  int get hashCode => Object.hash(
+      runtimeType,
+      userName,
+      userId,
+      const DeepCollectionEquality().hash(_moodMap),
+      isLoading,
+      isGeneratingReport);
 
   @JsonKey(ignore: true)
   @override
@@ -200,7 +230,8 @@ abstract class _HomeState implements HomeState {
       {required final String userName,
       required final String userId,
       required final Map<Mood, int> moodMap,
-      final bool isLoading}) = _$HomeStateImpl;
+      final bool isLoading,
+      final bool isGeneratingReport}) = _$HomeStateImpl;
 
   factory _HomeState.fromJson(Map<String, dynamic> json) =
       _$HomeStateImpl.fromJson;
@@ -213,6 +244,8 @@ abstract class _HomeState implements HomeState {
   Map<Mood, int> get moodMap;
   @override
   bool get isLoading;
+  @override
+  bool get isGeneratingReport;
   @override
   @JsonKey(ignore: true)
   _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>

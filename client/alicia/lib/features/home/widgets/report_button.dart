@@ -2,6 +2,7 @@ import 'package:alicia/core/config/style/colors.dart';
 import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReportButton extends ConsumerWidget {
   const ReportButton({super.key});
@@ -12,7 +13,7 @@ class ReportButton extends ConsumerWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          final response = await ref.read(homeProvider.notifier).getReportUrl();
+          final response = await ref.read(homeProvider.notifier).getReport();
           if (response.isLeft) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -21,7 +22,9 @@ class ReportButton extends ConsumerWidget {
               ),
             );
           }
-          print("Report URL: ${response.right}");
+          else if (response.isRight) {
+            await launchUrl(Uri.parse(response.right), mode: LaunchMode.externalNonBrowserApplication);
+          }
         },
         child: Container(
           width: double.infinity,

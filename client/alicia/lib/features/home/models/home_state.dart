@@ -12,6 +12,7 @@ class HomeState with _$HomeState {
     required String userId,
     required Map<Mood, int> moodMap,
     @Default(false) bool isLoading,
+    @Default(false) bool isGeneratingReport,
   }) = _HomeState;
 
   factory HomeState.fromJson(Map<String, dynamic> json) => _$HomeStateFromJson(json);

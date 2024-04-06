@@ -230,12 +230,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 90),
                   ],
                 ),
               ),
             ),
           ),
+          if (ref.watch(homeProvider).isGeneratingReport) Positioned(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: AliciaColors.backgroundGray.withOpacity(0.6),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AliciaColors.lightPurple,
+                )
+              ),
+            ),),
         ],
       ),
     );
