@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:alicia/core/assets/assets.dart';
 import 'package:alicia/core/config/style/colors.dart';
+import 'package:alicia/core/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,11 +27,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   bool _isListening = false;
   late final AnimationController _controller;
 
-
   @override
   void initState() {
     _speech = stt.SpeechToText();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3));
     _controller.stop();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _messageController.addListener(_handleMessageChange);
@@ -45,6 +45,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _messagesScrollController.dispose();
     _messageController.dispose();
     _controller.dispose();
+    _speech.stop();
     super.dispose();
   }
 
@@ -95,15 +96,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: 
-                    Lottie.asset(Assets.sttLottie, width: 30)
-                    // IconButton(
-                    //   onPressed: () => context.pop(),
-                    //   icon: Icon(
-                    //     Icons.arrow_back_ios_new,
-                    //     color: AliciaColors.backgroundGray,
-                    //   ),
-                    // ),
+                    child: IconButton(
+                      onPressed: () => context.pop(),
+                      icon: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: AliciaColors.backgroundGray,
+                      ),
+                    ),
                   ),
                   Center(
                     child: Material(
@@ -254,12 +253,18 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                                 : Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 12),
                                     child: Center(
-                                      child: Lottie.asset(
-                                        Assets.sttLottie,
-                                        controller: _controller,
-                                        repeat: true
+                                      child: ColorFiltered(
+                                        colorFilter: ColorFilter.mode(
+                                          AliciaColors.backgroundWhite,
+                                          BlendMode.srcIn,
                                         ),
-                                    )
+                                        child: Lottie.asset(
+                                          Assets.sttLottie,
+                                          controller: _controller,
+                                          repeat: true,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                           ),
                         ),
@@ -302,6 +307,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             _messageController.text = val.recognizedWords;
           }),
         );
+        Debouncer(milliseconds: 3500).run(() {
+          _controller.stop();
+          setState(() => _isListening = false);
+          _speech.stop();
+        });
       }
     } else {
       _controller.stop();
