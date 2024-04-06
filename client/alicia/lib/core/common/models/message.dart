@@ -6,6 +6,7 @@ part 'message.g.dart';
 class Message {
   final String content;
   final int timestamp;
+  @JsonKey(name: 'user_id')
   final String? userId;
 
   Message({

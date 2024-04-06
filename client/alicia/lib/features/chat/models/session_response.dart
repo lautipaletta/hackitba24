@@ -5,6 +5,7 @@ part 'session_response.g.dart';
 
 @JsonSerializable()
 class SessionResponse {
+  @JsonKey(name: 'prev_session_id')
   final String prevSessionId;
   final List<Message> messages;
 
