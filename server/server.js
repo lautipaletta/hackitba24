@@ -42,9 +42,16 @@ const user = new mongoose.Schema({
 const User = mongoose.model("User", user);
 
 app.post('/start_session', async (req, res)=>{
-    let usr = await User.findById(req.body.user_id).exec();
-    console.log(usr);
-    res.status(200).send("hello");
+    const usr = await User.findById(req.body.user_id).exec();
+    const prev_session = usr.sessions[usr.sessions.length-1];
+    const response_data = {prev_session_id: prev_session._id, messages: prev_session.text};
+    const prev_summary = prev_session.summary;
+    const opening_message = await get_next_message_from_Alicia([], prev_summary);
+    const session = new Session({text: [opening_message], summary: null, timestamp: Date.now()});
+    await session.save();
+    usr.sessions.push(session);
+    await usr.save();
+    res.status(200).send(JSON.stringify(response_data));
 });
 
 app.get('/get_session', (req, res)=>{
