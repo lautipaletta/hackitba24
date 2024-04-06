@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alicia/core/config/style/colors.dart';
 import 'package:alicia/features/home/providers/home_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +23,12 @@ class ReportButton extends ConsumerWidget {
                 backgroundColor: AliciaColors.red,
               ),
             );
-          }
-          else if (response.isRight) {
-            await launchUrl(Uri.parse(response.right), mode: LaunchMode.externalNonBrowserApplication);
+          } else if (response.isRight) {
+            if (Platform.isIOS) {
+              await launchUrl(Uri.parse(response.right));
+            } else {
+              await launchUrl(Uri.parse(response.right), mode: LaunchMode.externalNonBrowserApplication);
+            }
           }
         },
         child: Container(
