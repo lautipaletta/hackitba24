@@ -38,13 +38,11 @@ app.post('/start_session', async (req, res) => {
     const opening_text = await get_next_message_from_Alicia([], prev_session?.summary);
 
     const opening_message = new Message({content: opening_text, timestamp: Date.now(), role:"assistant"});
-    await opening_message.save();
 
     const session = new Session({messages: [opening_message], timestamp: Date.now()});
-    await session.save();
 
     usr.sessions.push(session);
-    await usr.save();
+    await usr.update();
 
     res.status(200).send({prev_session_id: prev_session?._id, messages: [opening_message]});
 });
@@ -77,18 +75,16 @@ app.post('/end_session', async (req, res) => {
 
     if (session.messages.length <= 1) {
         usr.sessions.pop();
-        await Session.deleteOne({_id: session._id});
     }
     else {
         session.summary = await get_session_summary_from_Mauro(session.messages);
-        await session.save();
 
         usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
         const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
         usr.emotional_summary[primary_emotion] += 1;
     }
 
-    await usr.save();
+    await usr.update();
 
     res.sendStatus(200);
 });
@@ -100,7 +96,6 @@ app.post('/message', async (req, res) => {
     if (!usr) return res.sendStatus(400);
 
     const message = new Message({content: content, role: "user", timestamp: Date.now()});
-    await message.save();
 
     const session = usr.sessions[usr.sessions.length - 1];
     
@@ -111,12 +106,10 @@ app.post('/message', async (req, res) => {
     const next_message_str = await get_next_message_from_Alicia(session.messages, prev_summary);
 
     const next_message = new Message({content: next_message_str, role: "assistant", timestamp: Date.now()});
-    await next_message.save();
 
     session.messages.push(next_message);
 
-    await session.save();
-    await usr.save();
+    await usr.update();
 
     res.status(200).send(next_message);
 });
