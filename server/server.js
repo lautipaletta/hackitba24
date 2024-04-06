@@ -14,7 +14,7 @@ app.listen(PORT, (error) => {
     else console.log("Error occurred, server can't start", error); 
 });
 
-app.use('/report', express.static('reports'))
+app.use("/reports", express.static('reports'));
 
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
@@ -113,6 +113,20 @@ app.post('/message', async (req, res) => {
     res.status(200).send(next_message);
 });
 
-app.get('/create_report', (req, res) => {
-    generate_report("Jorge", "1234", "se llama juan", "00/00/0000 - 23/23/2023", [{content: "lloro", period: "00/00/0000 - 23/23/2023"}, {content: "no lloro", period: "00/00/0000 - 23/23/2023"}]);
+app.get('/get_report', async (req, res) => {
+    const user_id = req.query.user_id;
+    const usr = await User.findById(user_id);
+    if(!usr) return res.sendStatus(400);
+    const sessions = usr.sessions;
+    if(sessions.length == 0) return res.sendStatus(400);
+    const report_period = period_from_list(sessions);
+    generate_report(usr.name, user_id, usr.summary, report_period, 
+        sessions.map(session => {
+            return {content: session.summary, period: period_from_list(session.messages)}
+        }));
+    res.status(200).send({url: `/reports/${user_id}.pdf`});
 });
+
+function period_from_list(list){
+    return `${new Date(list[0].timestamp)} - ${new Date(list[list.length-1].timestamp)}`
+}

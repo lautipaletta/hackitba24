@@ -21,18 +21,23 @@ function generate_report(user_name, user_id, user_summary, report_period, sessio
     doc.moveDown(2)
         .font('fonts/Poppins-Bold.ttf')
         .fontSize(12)
-        .text('Resumen General: ' + user_summary, {align: "justify"});
+        .text('Resumen General: ')
+        .font('fonts/Poppins-Regular.ttf')
+        .text(user_summary, {align: "justify"});
     
     sessions.forEach((session, index) => {
         doc.addPage()
             .font('fonts/Poppins-Bold.ttf')
             .fontSize(24)
-            .text('Session #' + index)
+            .text('Sesión #' + index)
             .moveDown()
             .font('fonts/Poppins-Medium.ttf')
             .fontSize(16)
             .text("Fecha: " + session.period)
-            .moveDown(2)
+            .moveDown()
+            .font('fonts/Poppins-Bold.ttf')
+            .fontSize(12)
+            .text('Resumen Sesión: ')
             .fontSize(12)
             .font('fonts/Poppins-Regular.ttf')
             .text(session.content);
