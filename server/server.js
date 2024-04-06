@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier } from "./model_requests.js";
+import { get_next_message_from_Alicia, get_session_summary_from_Mauro, get_user_summary_from_Javier, get_summary_primary_emotion_from_Felicia } from "./model_requests.js";
 import { Message, User, Session } from "./schemas.js";
 import { ObjectId } from "bson";
 
@@ -17,14 +17,10 @@ app.listen(PORT, (error) => {
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
 
-const juan = new User({name: "Juan", sessions: [], _id: new ObjectId("6610ebbe9a26fa276452bfae")});
-console.log(juan);
-juan.save();
-
 app.get('/hi', (req, res) => res.send("Hi!"));
 
 app.post('/create_user', async (req, res) => {
-    const usr = new User({name: req.body.name, sessions: []});
+    const usr = new User({name: req.body.name, sessions: [], emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
     await usr.save();
 
     res.status(200).send({user_id: usr._id});
@@ -78,6 +74,8 @@ app.post('/end_session', async (req, res) => {
         await session.save();
 
         usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
+        const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
+        usr.emotional_summary[primary_emotion] += 1;
     }
 
     await usr.save();

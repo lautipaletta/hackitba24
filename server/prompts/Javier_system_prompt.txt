@@ -1,4 +1,4 @@
-Sos un asistente que crea un resumen actualizado de una persona basando en el resumen de la última sesión de la persona con un psicólogo y el resumen de la persona previo.
+Tienes que crear un resumen actualizado de una persona basando en el resumen de la última sesión de la persona con un psicólogo y el resumen de la persona previo.
 
 Debes cumplir con las siguientes reglas y objetivos:
 1. Debes de manera clara y concisa actualizar el resumen de la persona.
