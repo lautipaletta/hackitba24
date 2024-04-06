@@ -38,10 +38,8 @@ app.post('/start_session', async (req, res) => {
     const opening_text = await get_next_message_from_Alicia([], prev_session?.summary);
 
     const opening_message = new Message({content: opening_text, timestamp: Date.now(), role:"assistant"});
-    await opening_message.save();
 
     const session = new Session({messages: [opening_message], timestamp: Date.now()});
-    await session.save();
 
     usr.sessions.push(session);
     await usr.save();
@@ -77,18 +75,19 @@ app.post('/end_session', async (req, res) => {
 
     if (session.messages.length <= 1) {
         usr.sessions.pop();
-        await Session.deleteOne({_id: session._id});
+        await usr.save();
     }
     else {
         session.summary = await get_session_summary_from_Mauro(session.messages);
-        await session.save();
+        await usr.save();
 
         usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
-        const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
-        usr.emotional_summary[primary_emotion] += 1;
-    }
+        await usr.save();
 
-    await usr.save();
+        const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
+        usr.emotional_summary[primary_emotion] = (usr.emotional_summary[primary_emotion] ?? 0) + 1;
+        await usr.save();
+    }
 
     res.sendStatus(200);
 });
@@ -100,25 +99,24 @@ app.post('/message', async (req, res) => {
     if (!usr) return res.sendStatus(400);
 
     const message = new Message({content: content, role: "user", timestamp: Date.now()});
-    await message.save();
 
     const session = usr.sessions[usr.sessions.length - 1];
     
     session.messages.push(message);
+
+    await usr.save();
 
     const prev_summary = usr.sessions[usr.sessions.length - 2]?.summary;
 
     const next_message_str = await get_next_message_from_Alicia(session.messages, prev_summary);
 
     const next_message = new Message({content: next_message_str, role: "assistant", timestamp: Date.now()});
-    await next_message.save();
 
     session.messages.push(next_message);
 
     const len = usr.week_attendance.length-1;
     if(!usr.week_attendance[len]) usr.week_attendance[len] = true;
 
-    await session.save();
     await usr.save();
 
     res.status(200).send(next_message);
@@ -143,13 +141,17 @@ app.get('/get_report', async (req, res) => {
     const user_id = req.query.user_id;
     const usr = await User.findById(user_id);
     if(!usr) return res.sendStatus(400);
+
     const sessions = usr.sessions;
     if(sessions.length == 0) return res.sendStatus(400);
+
     const report_period = period_from_list(sessions);
+
     generate_report(usr.name, user_id, usr.summary, report_period, 
         sessions.map(session => {
             return {content: session.summary, date: new Date(session.timestamp).toLocaleDateString("es-ES")}
         }));
+
     res.status(200).send({url: `/reports/${user_id}.pdf`});
 });
 
