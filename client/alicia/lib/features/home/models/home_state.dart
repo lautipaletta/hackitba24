@@ -1,3 +1,4 @@
+import 'package:alicia/features/home/models/attendance_response.dart';
 import 'package:alicia/features/home/models/mood.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,8 +13,8 @@ class HomeState with _$HomeState {
     required String userId,
     required Map<Mood, int> moodMap,
     @Default(false) bool isLoading,
+    @Default(null) List<bool>? attendance,
   }) = _HomeState;
 
   factory HomeState.fromJson(Map<String, dynamic> json) => _$HomeStateFromJson(json);
-
 }
