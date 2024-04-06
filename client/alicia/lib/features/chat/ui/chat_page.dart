@@ -93,31 +93,38 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AliciaColors.buttonPurple.withOpacity(0.4),
+                    child: Material(
+                      color: AliciaColors.buttonPurple.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(100),
+                      child: InkWell(
+                        onTap: () {},
                         borderRadius: BorderRadius.circular(100),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Cargar ',
-                              style: TextStyle(
-                                color: AliciaColors.backgroundWhite,
-                                fontSize: 14,
-                              ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Cargar ',
+                                  style: TextStyle(
+                                    color: AliciaColors.backgroundWhite,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'sesión anterior',
+                                  style: TextStyle(
+                                    color: AliciaColors.backgroundWhite,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                            TextSpan(
-                              text: 'sesión anterior',
-                              style: TextStyle(
-                                color: AliciaColors.backgroundWhite,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -207,27 +214,34 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       ),
                       const SizedBox(width: 4),
-                      Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: AliciaColors.buttonPurple,
+                      Material(
+                        color: AliciaColors.buttonPurple,
+                        borderRadius: BorderRadius.circular(16),
+                        child: InkWell(
+                          onTap: () {},
                           borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: !textFieldEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.fromLTRB(16, 0, 20, 0),
+                                    child: Icon(
+                                      FontAwesomeIcons.paperPlane,
+                                      color: AliciaColors.backgroundWhite,
+                                      size: 20,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: SvgPicture.asset(
+                                      Assets.voice,
+                                    ),
+                                  ),
+                          ),
                         ),
-                        child: !textFieldEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.fromLTRB(16, 0, 20, 0),
-                                child: Icon(
-                                  FontAwesomeIcons.paperPlane,
-                                  color: AliciaColors.backgroundWhite,
-                                  size: 20,
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: SvgPicture.asset(
-                                  Assets.voice,
-                                ),
-                              ),
                       ),
                     ],
                   ),
