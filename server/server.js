@@ -42,7 +42,7 @@ app.post('/start_session', async (req, res) => {
     const session = new Session({messages: [opening_message], timestamp: Date.now()});
 
     usr.sessions.push(session);
-    await usr.save();
+    await User.findOneAndUpdate({_id: usr._id}, usr);
 
     res.status(200).send({prev_session_id: prev_session?._id, messages: [opening_message]});
 });
@@ -74,19 +74,17 @@ app.post('/end_session', async (req, res) => {
 
     if (session.messages.length <= 1) {
         usr.sessions.pop();
-        await usr.save();
     }
     else {
         session.summary = await get_session_summary_from_Mauro(session.messages);
-        await usr.save();
 
         usr.summary = await get_user_summary_from_Javier(usr.summary, session.summary);
-        await usr.save();
 
         const primary_emotion = await get_summary_primary_emotion_from_Felicia(session.summary);
         usr.emotional_summary[primary_emotion] = (usr.emotional_summary[primary_emotion] ?? 0) + 1;
-        await usr.save();
     }
+
+    await User.findOneAndUpdate({_id: usr._id}, usr);
 
     res.sendStatus(200);
 });
@@ -103,8 +101,6 @@ app.post('/message', async (req, res) => {
     
     session.messages.push(message);
 
-    await usr.save();
-
     const prev_summary = usr.sessions[usr.sessions.length - 2]?.summary;
 
     const next_message_str = await get_next_message_from_Alicia(session.messages, prev_summary);
@@ -119,7 +115,7 @@ app.post('/message', async (req, res) => {
         usr.week_attendance[len-1] = true;
     }
 
-    await usr.save();
+    await User.findOneAndUpdate({_id: usr._id}, usr);
 
     res.status(200).send(next_message);
 });
@@ -130,7 +126,7 @@ app.get('/get_attendance', async (req, res) => {
 
     if (usr.last_attendance) {
         usr.week_attendance = shift_array(usr.week_attendance, Math.floor((Date.now() - usr.last_attendance) / (1000 * 3600 * 24)));
-        await usr.save();
+        await User.findOneAndUpdate({_id: usr._id}, usr);
     }
 
     res.status(200).send({attendance: usr.week_attendance});
