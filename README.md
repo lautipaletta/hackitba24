@@ -25,11 +25,12 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 }
 ```
 Aclaración: el emulador/dispositivo tiene que estar conectado a la misma red que el servidor. El speech to text no funciona en el emulador (no intentar)
-10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
+10. En una terminal ir a el directorio client/alicia/
+11. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
 ```bash
 $ flutter pub get
 $ flutter pub upgrade
 $ dart run build_runner build
 $ flutter run --dart-define-from-file=host.json
 ```
-11. Disfrutar :D
+12. Disfrutar :D

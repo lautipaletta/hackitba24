@@ -19,8 +19,6 @@ app.use("/reports", express.static('reports'));
 mongoose.connect('mongodb://127.0.0.1:27017/database');
 console.log("connected to database")
 
-app.get('/hi', (req, res) => res.send());
-
 app.post('/create_user', async (req, res) => {
     const usr = new User({name: req.body.name, sessions: [], week_attendance: Array(7).fill(false), emotional_summary: {feliz: 0, enojado: 0, ansioso: 0, triste: 0, calmo: 0}});
     await usr.save();
