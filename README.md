@@ -16,7 +16,7 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 4. La API de OpenAI necesita una api key paga. Les proveemos el .env (no lo subimos al repo). Pegarlo dentro del directorio server.
 5. Ejecutar `npm i`
 6. Ejecutar `npm start` para iniciar el servidor
-7. Descargar Flutter 3.19.X
+7. Descargar e instalar Flutter 3.19.X: asegurarse que al ejecutar el comando `flutter doctor` todas las instalaciones han sido realizadas (Android Studio, Google Chrome, Android toolchain, emulador o dispositivo conectado, etc).
 8. Conseguir dirección IPv4 (del servidor)
 9. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo host.json ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
 ```json
@@ -25,7 +25,7 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 }
 ```
 Aclaración: el emulador tiene que estar conectado a la misma red que el servidor.
-10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
+10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos en `client/alicia/`:
 ```bash
 $ flutter pub get
 $ flutter pub upgrade
