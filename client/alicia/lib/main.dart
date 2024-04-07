@@ -34,7 +34,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
     final chatState = globalRef!.read(chatProvider);
     final chatController = globalRef!.read(chatProvider.notifier);
     final homeState = globalRef!.read(homeProvider.notifier);
-    if (state != AppLifecycleState.resumed) {
+    if (state != AppLifecycleState.resumed && state != AppLifecycleState.inactive) {
       if (globalRef == null) return;
       if (chatState.sessionStarted && !chatState.sessionTerminated) {
         chatController.endSession();
