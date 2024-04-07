@@ -44,6 +44,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
         chatController.resetState();
         chatController.init();
         homeState.getMoodMap();
+        homeState.getAttendance();
       }
     }
   }
