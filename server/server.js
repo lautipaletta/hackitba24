@@ -125,7 +125,9 @@ app.get('/get_attendance', async (req, res) => {
     if(!usr) return res.sendStatus(400);
 
     if (usr.last_attendance) {
-        usr.week_attendance = shift_array(usr.week_attendance, Math.floor((Date.now() - usr.last_attendance) / (1000 * 3600 * 24)));
+        const milliseconds_in_day = 1000 * 3600 * 24;
+        const now = Date.now();
+        usr.week_attendance = shift_array(usr.week_attendance, Math.floor(now / milliseconds_in_day) - Math.floor(usr.last_attendance / milliseconds_in_day));
         await User.findOneAndUpdate({_id: usr._id}, usr);
     }
 
