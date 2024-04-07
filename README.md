@@ -17,15 +17,19 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 5. Ejecutar `npm i`
 6. Ejecutar `npm start` para iniciar el servidor
 7. Descargar e instalar Flutter 3.19.X: asegurarse que al ejecutar el comando `flutter doctor` todas las instalaciones han sido realizadas (Android Studio, Google Chrome, Android toolchain, emulador o dispositivo conectado, etc).
-8. Conseguir dirección IPv4 (del servidor)
-9. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo host.json ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
+
+    Les dejamos un tutorial completo: https://www.youtube.com/watch?v=NF6kQJY5kL4&pp=ygUVY29tbyBpbnN0YWxhciBmbHV0dGVy
+
+8. Conseguir dirección IPv4 (del servidor), la cual será utilizada en la app móvil para conectarse. Pueden usar el comando `ipconfig` o `ifconfig` dependiendo su usan Windows u otro sistema operativo (para mac es desde la configuración: https://www.security.org/vpn/find-mac-ip-address/).
+9. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo `host.json` ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
 ```json
 {
     "BASE_URL": "http://ipDelServidor:3000"
 }
 ```
-Aclaración: el emulador tiene que estar conectado a la misma red que el servidor.
-10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos en `client/alicia/`:
+Aclaración: el emulador tiene que estar conectado a la misma red que el servidor. El archivo `host.json` puede ya tener información cargada, reemplazar por la correspondiente al servidor que corran los evaluadores.
+
+10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos en `client/alicia/` (en caso de conectar un dispositivo físico, activar la depuración USB y el modo desarrollador en el dispositivo):
 ```bash
 $ flutter pub get
 $ flutter pub upgrade
