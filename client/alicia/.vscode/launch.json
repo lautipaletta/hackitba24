@@ -7,19 +7,28 @@
         {
             "name": "alicia",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define-from-file=host.json"
+            ]
         },
         {
             "name": "alicia (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define-from-file=host.json"
+            ]
         },
         {
             "name": "alicia (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--dart-define-from-file=host.json"
+            ]
         }
     ]
 }

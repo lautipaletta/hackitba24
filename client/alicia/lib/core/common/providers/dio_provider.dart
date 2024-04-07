@@ -5,7 +5,7 @@ final dioProvider = Provider<Dio>(
   (ref) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'http://172.20.10.8:3000',
+        baseUrl: const String.fromEnvironment('BASE_URL'),
       ),
     );
     dio.interceptors.add(LogInterceptor());
