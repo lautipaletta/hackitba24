@@ -38,12 +38,12 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
       if (globalRef == null) return;
       if (chatState.sessionStarted && !chatState.sessionTerminated) {
         chatController.endSession();
-        homeState.getMoodMap();
       }
     } else {
       if (chatState.sessionTerminated) {
         chatController.resetState();
         chatController.init();
+        homeState.getMoodMap();
       }
     }
   }
