@@ -10,24 +10,26 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 
 # Instalación 💻
 
-1. Instalar MongoDB
-2. Instalar Node.js
+1. Instalar MongoDB >= 7.X
+2. Instalar Node.js >= 18.X
 3. Abrir el directorio ./server en la terminal
-4. Ejecutar npm i
-5. Ejecutar npm start para iniciar el servidor
-5. Descargar Flutter 3.19.X
-6. Conseguir dirección IPv4 (del servidor)
-7. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo host.json ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
+4. La API de OpenAI necesita una api key paga. Les proveemos el .env (no lo subimos al repo). Pegarlo dentro del directorio server.
+5. Ejecutar `npm i`
+6. Ejecutar `npm start` para iniciar el servidor
+7. Descargar Flutter 3.19.X
+8. Conseguir dirección IPv4 (del servidor)
+9. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo host.json ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
 ```json
 {
     "BASE_URL": "http://ipDelServidor:3000"
 }
 ```
-8. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
+Aclaración: el emulador tiene que estar conectado
+10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
 ```bash
 $ flutter pub get
 $ flutter pub upgrade
 $ dart run build_runner build
 $ flutter run --dart-define-from-file=host.json
 ```
-9. Disfrutar :D
+11. Disfrutar :D
