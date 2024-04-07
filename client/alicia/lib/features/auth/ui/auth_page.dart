@@ -83,7 +83,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                             .copyWith(fontSize: 17, color: AliciaColors.backgroundGray),
                         children: const [
                       TextSpan(text: "Bienvenido a "),
-                      TextSpan(text: "Alicia", style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: "AlicIA", style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(text: ": tu nueva terapeuta"),
                     ])),
                 Expanded(

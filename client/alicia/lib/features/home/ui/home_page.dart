@@ -137,7 +137,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                             ),
                             TextSpan(
-                              text: 'Alicia',
+                              text: 'AlicIA',
                               style: TextStyle(
                                 color: AliciaColors.darkText,
                                 fontSize: 15,
@@ -166,7 +166,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Tus informe personal",
+                            "Tu informe personal",
                             style: TextStyle(
                               color: AliciaColors.darkText,
                               fontSize: 24,

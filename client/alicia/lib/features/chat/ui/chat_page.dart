@@ -473,7 +473,7 @@ class Message extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  aliciaMessage ? 'Alicia' : 'Tú',
+                  aliciaMessage ? 'AlicIA' : 'Tú',
                   style: TextStyle(
                     color: AliciaColors.backgroundWhite,
                     fontSize: 18,
