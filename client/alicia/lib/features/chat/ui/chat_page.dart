@@ -31,6 +31,7 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
   late FlutterTts _flutterTts;
   bool _isListening = false;
   bool _isPlaying = false;
+  bool _playTts = true;
   late final AnimationController _controller;
 
   @override
@@ -175,18 +176,37 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: IconButton(
-                                onPressed: () {
-                                  ref.read(homeProvider.notifier).getAttendance();
-                                  context.pop();
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back_ios_new,
-                                  color: AliciaColors.backgroundGray,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    ref.read(homeProvider.notifier).getAttendance();
+                                    context.pop();
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back_ios_new,
+                                    color: AliciaColors.backgroundGray,
+                                  ),
                                 ),
-                              ),
+                                IconButton(
+                                  onPressed: () async {
+                                    if (_isPlaying) {
+                                      await _flutterTts.stop();
+                                      setState(() {
+                                        _isPlaying = false;
+                                      });
+                                    }
+                                    setState(() {
+                                      _playTts = !_playTts;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _playTts ? FontAwesomeIcons.volumeHigh : FontAwesomeIcons.volumeXmark,
+                                    color: AliciaColors.backgroundGray,
+                                  ),
+                                ),
+                              ],
                             ),
                             if (state.prevSessionId != null)
                               state.isLoadingMore
@@ -333,7 +353,7 @@ class ChatPageState extends ConsumerState<ChatPage> with TickerProviderStateMixi
                                           content: content,
                                         );
                                         _scrollToEnd(millis: 50);
-                                        if (result.isRight) {
+                                        if (result.isRight && _playTts) {
                                           await _flutterTts.speak(result.right);
                                         }
                                       } else {
