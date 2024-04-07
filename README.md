@@ -17,4 +17,17 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 5. Ejecutar npm start para iniciar el servidor
 5. Descargar Flutter 3.19.X
 6. Conseguir dirección IPv4 (del servidor)
-etc...
+7. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo host.json ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
+```json
+{
+    "BASE_URL": "http://ipDelServidor:3000"
+}
+```
+8. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
+```bash
+$ flutter pub get
+$ flutter pub upgrade
+$ dart run build_runner build
+$ flutter run --dart-define-from-file=host.json
+```
+9. Disfrutar :D
