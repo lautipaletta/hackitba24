@@ -1,6 +1,6 @@
 # AlicIA - HackITBA 24'
 
-# Descripción
+# Descripción 🗎
 
 Alicia es una aplicación movil gratuita, impulsada por inteligencia artificial, con el propósito es disminuir la barrera de entrada para recibir apoyo psicológico. 
 
@@ -8,10 +8,10 @@ Para lograr esto, Alicia lleva a cabo una serie de conversaciones con el usuario
 
 Adicionalmente, estos datos son luego reutilizados para la conformación de un reporte general sobre el usuario, el cual es descargable con el objetivo de presentarselo a un psicólogo a manera de pie para comenzar sesiones con el mismo.
 
-# Instalación
+# Instalación 💻
 
-1. Instalar MongoDB 7.X
-2. Instalar Node.js 18.X
+1. Instalar MongoDB
+2. Instalar Node.js
 3. Abrir el directorio ./server en la terminal
 4. Ejecutar npm i
 5. Ejecutar npm start para iniciar el servidor

@@ -33,7 +33,8 @@ function generate_report(user_name, user_id, user_summary, report_period, sessio
         .fillColor("black")
         .text(user_summary, {align: "justify"});
     
-    sessions.forEach((session, index) => {
+    let index = 0;
+    sessions.forEach((session) => {
         if(session.content){
             doc.addPage()
                 .image('pngs/alicia_fab.png', 450, 50, {width:100})
@@ -55,6 +56,8 @@ function generate_report(user_name, user_id, user_summary, report_period, sessio
                 .font('fonts/Poppins-Regular.ttf')
                 .fillColor("black")
                 .text(session.content);
+
+            index++;
         }
     });
     
