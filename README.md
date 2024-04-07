@@ -20,7 +20,7 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
 
     Les dejamos un tutorial completo: https://www.youtube.com/watch?v=NF6kQJY5kL4&pp=ygUVY29tbyBpbnN0YWxhciBmbHV0dGVy
 
-8. Conseguir dirección IPv4 (del servidor), la cual será utilizada en la app móvil para conectarse. Pueden usar el comando `ipconfig` o `ifconfig` dependiendo su usan Windows u otro sistema operativo (para mac es desde la configuración: https://www.security.org/vpn/find-mac-ip-address/).
+8. Conseguir dirección IPv4 (del servidor), la cual será utilizada en la app móvil para conectarse. Pueden usar el comando `ipconfig` o `ifconfig` dependiendo si usan Windows u otro sistema operativo (para mac es desde la configuración: https://www.security.org/vpn/find-mac-ip-address/).
 9. Cargar la dirección IPv4 del servidor + el puerto 3000 en el archivo `host.json` ubicado en `client/alicia/` de forma que quede como el siguiente ejemplo:
 ```json
 {
