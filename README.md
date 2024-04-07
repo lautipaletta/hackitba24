@@ -1,6 +1,6 @@
 # AlicIA - HackITBA 24'
 
-# Descripción 🗎
+# Descripción 📄
 
 Alicia es una aplicación movil gratuita, impulsada por inteligencia artificial, con el propósito es disminuir la barrera de entrada para recibir apoyo psicológico. 
 
@@ -24,7 +24,7 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
     "BASE_URL": "http://ipDelServidor:3000"
 }
 ```
-Aclaración: el emulador tiene que estar conectado
+Aclaración: el emulador tiene que estar conectado a la misma red que el servidor.
 10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
 ```bash
 $ flutter pub get
