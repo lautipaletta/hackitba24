@@ -24,7 +24,7 @@ Adicionalmente, estos datos son luego reutilizados para la conformación de un r
     "BASE_URL": "http://ipDelServidor:3000"
 }
 ```
-Aclaración: el emulador tiene que estar conectado a la misma red que el servidor.
+Aclaración: el emulador/dispositivo tiene que estar conectado a la misma red que el servidor. El speech to text no funciona en el emulador (no intentar)
 10. Abrir un emulador / conectar el celular a la pc y ejecutar los comandos:
 ```bash
 $ flutter pub get
